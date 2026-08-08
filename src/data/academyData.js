@@ -4,7 +4,7 @@ export const ACADEMY_INFO = {
   name: "Vibrant Music Academy",
   tagline: "Master the Art of Music with Iyer Sir",
   subTagline: "Structured Learning for All Age Groups | Guitar, Keyboard, Drums, Music Theory & Trinity College London Certification",
-  location: "Bandra West / Powai, Mumbai, Maharashtra",
+  location: "Ghansoli, Navi Mumbai, 400701",
   phone: "+91 98200 12345",
   whatsapp: "+919820012345",
   email: "contact@vibrantmusicacademy.in",
@@ -31,8 +31,8 @@ export const IYER_SIR_BIO = {
   philosophy: "Music isn't just about hitting notes; it's about understanding why you want to play, clearing fundamentals, and enjoying every chord. Whether you are 7 or 60, anyone can learn with the right guidance.",
   studentTransformationStory: {
     title: "A Student's Story: From YouTube Burnout to Stage Confidence",
-    author: "IT Professional, Mumbai",
-    quote: "I tried learning guitar online through YouTube playlists, but I couldn't grasp the basics and lost interest. When I moved to Mumbai for my IT job, I stumbled upon Vibrant Academy. Iyer Sir sat with me, asked what I wanted to achieve, and cleared my fundamentals with music theory. Today, I comfortably play intermediate songs and understand music deeply. Creating this website is my Gurudakshina to him!"
+    author: "IT Professional, Ghansoli, Navi Mumbai",
+    quote: "I tried learning guitar online through YouTube playlists, but I couldn't grasp the basics and lost interest. When I came to Ghansoli, Navi Mumbai for my IT job, I stumbled upon Vibrant Academy. Iyer Sir sat with me, asked what I wanted to achieve, and cleared my fundamentals with music theory. Today, I comfortably play intermediate songs and understand music deeply. Creating this website is my Gurudakshina to him!"
   }
 };
 

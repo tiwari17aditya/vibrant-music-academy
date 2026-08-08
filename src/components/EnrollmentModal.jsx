@@ -8,7 +8,7 @@ const EnrollmentModal = ({ preSelectedCourse, onClose, onProceedToPayment }) => 
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [batch, setBatch] = useState('Weekend Morning (Sat-Sun 10 AM)');
-  const [learningMode, setLearningMode] = useState('Offline Studio Class (Mumbai)');
+  const [learningMode, setLearningMode] = useState('Offline Studio Class (Ghansoli, Navi Mumbai, 400701)');
   const [errorMsg, setErrorMsg] = useState('');
 
   const currentCourse = COURSES_DATA.find(c => c.id === selectedCourseId) || COURSES_DATA[0];
@@ -220,7 +220,7 @@ const EnrollmentModal = ({ preSelectedCourse, onClose, onProceedToPayment }) => 
                   fontSize: '0.88rem'
                 }}
               >
-                <option value="Offline Studio Class (Mumbai)" style={{ background: '#1c202e' }}>Offline Studio (Mumbai)</option>
+                <option value="Offline Studio Class (Ghansoli, Navi Mumbai, 400701)" style={{ background: '#1c202e' }}>Offline Studio (Ghansoli, Navi Mumbai)</option>
                 <option value="Online 1-on-1 Interactive" style={{ background: '#1c202e' }}>Online 1-on-1</option>
               </select>
             </div>

@@ -1,6 +1,6 @@
 # Vibrant Music Academy 🎸🎹🥁
 
-> **A modern, high-performance web application & interactive music platform for Vibrant Music Academy (Mumbai), created as a heartfelt *Gurudakshina* for Iyer Sir.**
+> **A modern, high-performance web application & interactive music platform for Vibrant Music Academy (Ghansoli, Navi Mumbai, 400701), created as a heartfelt *Gurudakshina* for Iyer Sir.**
 
 ![Vibrant Music Academy](https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1200&auto=format&fit=crop&q=80)
 
@@ -8,7 +8,7 @@
 
 ## 📌 Project Overview
 
-**Vibrant Music Academy** is a web application designed to showcase **Iyer Sir’s** music education academy in Mumbai. It acts as both a digital storefront to attract prospective students across all age groups and a practical platform equipped with free interactive music utilities (Web Audio metronome, guitar chord visualizer with synthesized audio, Trinity exam readiness quiz, social media reels hub, and simulated payment gateway).
+**Vibrant Music Academy** is a web application designed to showcase **Iyer Sir’s** music education academy in Ghansoli, Navi Mumbai (400701). It acts as both a digital storefront to attract prospective students across all age groups and a practical platform equipped with free interactive music utilities (Web Audio metronome, guitar chord visualizer with synthesized audio, Trinity exam readiness quiz, social media reels hub, and simulated payment gateway).
 
 This project also serves as a flagship portfolio piece demonstrating modern frontend architecture, state management, CSS custom design tokens, and Web Audio synthesis.
 
@@ -85,4 +85,4 @@ This project also serves as a flagship portfolio piece demonstrating modern fron
 
 ## ❤️ Credits & Acknowledgments
 
-Designed and developed with gratitude as a **Gurudakshina** for **Iyer Sir** at **Vibrant Music Academy**, Mumbai.
+Designed and developed with gratitude as a **Gurudakshina** for **Iyer Sir** at **Vibrant Music Academy**, Ghansoli, Navi Mumbai, 400701.

@@ -35,7 +35,7 @@ const HeroSection = ({ onExploreCoursesClick, onBookDemoClick }) => {
           <div>
             <div style={{ marginBottom: '1.2rem' }}>
               <span className="badge badge-gold">
-                <Sparkles size={14} /> Mumbai's Premier Music Academy
+                <Sparkles size={14} /> Ghansoli, Navi Mumbai (400701) Premier Music Academy
               </span>
             </div>
 
