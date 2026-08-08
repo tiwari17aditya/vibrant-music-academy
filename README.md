@@ -42,6 +42,7 @@ This project also serves as a flagship portfolio piece demonstrating modern fron
   - `src/data/mediaAssets.js`: **Centralized Media Asset Hub** — Single file to edit all image URLs, YouTube video embeds, social handles, and studio map links.
   - `src/data/academyData.js`: Centralized data constants for courses, fee structures, bio, and student reviews.
   - `.agents/AGENTS.md`: Workspace rules & token optimization
+  - `docs/SUGGESTED_ENHANCEMENTS.md`: **Future Roadmap & Enhancements** — WhatsApp webhooks, Supabase real-time DB, student practice portal, and multi-language support.
   - `docs/TECH_STACK.md`: Complete tech stack manifest
   - `docs/VERSION.md`: Semantic versioning (`v1.0.0`)
   - `docs/DEPLOYMENT_AND_INFRASTRUCTURE.md`: Free Vercel/Netlify hosting & Supabase/Firebase guides
