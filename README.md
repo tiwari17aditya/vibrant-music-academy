@@ -38,7 +38,9 @@ This project also serves as a flagship portfolio piece demonstrating modern fron
 - **Styling**: Pure CSS3 with CSS Custom Properties, Flexbox/Grid, and Glassmorphism backdrop filters
 - **Audio Engine**: Native Browser Web Audio API (`AudioContext`, Oscillator nodes, Gain safety caps)
 - **Icons**: Lucide React icons & custom SVG brand vectors
-- **Infrastructure & Docs**:
+- **Infrastructure & Configuration**:
+  - `src/data/mediaAssets.js`: **Centralized Media Asset Hub** — Single file to edit all image URLs, YouTube video embeds, social handles, and studio map links.
+  - `src/data/academyData.js`: Centralized data constants for courses, fee structures, bio, and student reviews.
   - `.agents/AGENTS.md`: Workspace rules & token optimization
   - `docs/TECH_STACK.md`: Complete tech stack manifest
   - `docs/VERSION.md`: Semantic versioning (`v1.0.0`)

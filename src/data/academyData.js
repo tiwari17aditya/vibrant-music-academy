@@ -1,15 +1,17 @@
 // Centralized Data Model for Vibrant Music Academy
 
+import { IMAGE_ASSETS, YOUTUBE_EMBED_URLS, SOCIAL_LINKS } from './mediaAssets';
+
 export const ACADEMY_INFO = {
   name: "Vibrant Music Academy",
   tagline: "Master the Art of Music with Iyer Sir",
   subTagline: "Structured Learning for All Age Groups | Guitar, Keyboard, Drums, Music Theory & Trinity College London Certification",
   location: "Ghansoli, Navi Mumbai, 400701",
   phone: "+91 98200 12345",
-  whatsapp: "+919820012345",
+  whatsapp: SOCIAL_LINKS.whatsapp.number,
   email: "contact@vibrantmusicacademy.in",
-  instagram: "@iyersir_vibrant_music",
-  youtube: "@IyerSirMusicAcademy",
+  instagram: SOCIAL_LINKS.instagram.handle,
+  youtube: SOCIAL_LINKS.youtube.handle,
   stats: {
     students: "500+",
     trinityPassRate: "100%",
@@ -143,7 +145,7 @@ export const SOCIAL_HUB_DATA = {
       views: "12.4K",
       likes: "1.8K",
       date: "2 days ago",
-      thumbnail: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=80",
+      thumbnail: IMAGE_ASSETS.reelsThumbnails.reel1,
       tag: "Guitar Tips"
     },
     {
@@ -152,7 +154,7 @@ export const SOCIAL_HUB_DATA = {
       views: "18.9K",
       likes: "2.4K",
       date: "5 days ago",
-      thumbnail: "https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=600&auto=format&fit=crop&q=80",
+      thumbnail: IMAGE_ASSETS.reelsThumbnails.reel2,
       tag: "Iyer Sir Reels"
     },
     {
@@ -161,7 +163,7 @@ export const SOCIAL_HUB_DATA = {
       views: "9.2K",
       likes: "1.1K",
       date: "1 week ago",
-      thumbnail: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600&auto=format&fit=crop&q=80",
+      thumbnail: IMAGE_ASSETS.reelsThumbnails.reel3,
       tag: "Student Showcase"
     },
     {
@@ -170,7 +172,7 @@ export const SOCIAL_HUB_DATA = {
       views: "25.1K",
       likes: "3.5K",
       date: "2 weeks ago",
-      thumbnail: "https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=600&auto=format&fit=crop&q=80",
+      thumbnail: IMAGE_ASSETS.reelsThumbnails.reel4,
       tag: "Music Theory"
     }
   ],
@@ -180,7 +182,8 @@ export const SOCIAL_HUB_DATA = {
       title: "Complete Guitar Tuning & Basic Chords Masterclass (Hindi / English)",
       duration: "14:20",
       views: "45K",
-      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      thumbnail: IMAGE_ASSETS.youtubeThumbnails.lesson1,
+      embedUrl: YOUTUBE_EMBED_URLS.guitarFoundationsMasterclass,
       description: "Learn how to tune your guitar pitch-perfect and play C Major, G Major, and Am chords effortlessly."
     },
     {
@@ -188,7 +191,8 @@ export const SOCIAL_HUB_DATA = {
       title: "How to Prepare for Trinity College London Guitar Grade 1",
       duration: "22:15",
       views: "31K",
-      embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      thumbnail: IMAGE_ASSETS.youtubeThumbnails.lesson2,
+      embedUrl: YOUTUBE_EMBED_URLS.trinityGradePrepTutorial,
       description: "A step-by-step roadmap for Trinity exam pieces, scales, technical exercises, and aural tests."
     }
   ]

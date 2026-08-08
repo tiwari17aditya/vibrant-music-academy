@@ -1,6 +1,7 @@
 import React from 'react';
 import { Play, Sparkles, Award, Users, CheckCircle, ArrowRight } from 'lucide-react';
 import { ACADEMY_INFO } from '../data/academyData';
+import { IMAGE_ASSETS } from '../data/mediaAssets';
 
 const HeroSection = ({ onExploreCoursesClick, onBookDemoClick }) => {
   return (
@@ -80,7 +81,7 @@ const HeroSection = ({ onExploreCoursesClick, onBookDemoClick }) => {
               position: 'relative'
             }}>
               <img
-                src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80"
+                src={IMAGE_ASSETS.heroBanner}
                 alt="Guitar Music Practice at Vibrant Academy"
                 style={{
                   width: '100%',
