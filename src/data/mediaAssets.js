@@ -7,8 +7,8 @@
 
 export const SOCIAL_LINKS = {
   instagram: {
-    handle: "@iyersir_vibrant_music",
-    url: "https://instagram.com/iyersir_vibrant_music"
+    handle: "@_vibrantbeats_",
+    url: "https://www.instagram.com/_vibrantbeats_?igsh=cTJ5aTdsaHh0aTR3"
   },
   youtube: {
     handle: "@IyerSirMusicAcademy",
@@ -23,10 +23,10 @@ export const SOCIAL_LINKS = {
 export const IMAGE_ASSETS = {
   // Hero section main acoustic guitar image
   heroBanner: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80",
-  
+
   // Studio & practice classroom photos
   studioClassroom: "https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=800&auto=format&fit=crop&q=80",
-  
+
   // Instagram Reels Thumbnail Mockups
   reelsThumbnails: {
     reel1: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=80",
