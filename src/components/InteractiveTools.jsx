@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, Play, Square, Sparkles, Music, Award, Disc, CheckCircle } from 'lucide-react';
+import { Volume2, Play, Square, Sparkles, Music, Award, Disc, Mic, MicOff, CheckCircle, Radio } from 'lucide-react';
 import { GUITAR_CHORDS_DATA, TRINITY_QUIZ_QUESTIONS } from '../data/academyData';
 
 const GUITAR_TUNING_STRINGS = [
-  { name: "6th String (Low E)", note: "E2", freq: 82.41, description: "Thickest top string" },
-  { name: "5th String (A)", note: "A2", freq: 110.00, description: "5th string" },
-  { name: "4th String (D)", note: "D3", freq: 146.83, description: "4th string" },
-  { name: "3rd String (G)", note: "G3", freq: 196.00, description: "3rd string" },
-  { name: "2nd String (B)", note: "B3", freq: 246.94, description: "2nd string" },
-  { name: "1st String (High E)", note: "E4", freq: 329.63, description: "Thinnest bottom string" }
+  { name: "6th String", note: "E2", freq: 82.41, description: "Low E" },
+  { name: "5th String", note: "A2", freq: 110.00, description: "A" },
+  { name: "4th String", note: "D3", freq: 146.83, description: "D" },
+  { name: "3rd String", note: "G3", freq: 196.00, description: "G" },
+  { name: "2nd String", note: "B3", freq: 246.94, description: "B" },
+  { name: "1st String", note: "E4", freq: 329.63, description: "High E" }
 ];
 
 const PIANO_KEYS = [
@@ -26,6 +26,54 @@ const PIANO_KEYS = [
   { note: "B4", sargam: "Ni", type: "white", freq: 493.88 },
   { note: "C5", sargam: "Sa (T)", type: "white", freq: 523.25 }
 ];
+
+// Open-Source Pitch Auto-Correlation Algorithm
+function autoCorrelate(buf, sampleRate) {
+  let SIZE = buf.length;
+  let rms = 0;
+  for (let i = 0; i < SIZE; i++) {
+    let val = buf[i];
+    rms += val * val;
+  }
+  rms = Math.sqrt(rms / SIZE);
+  if (rms < 0.015) return -1; // Volume too low
+
+  let r1 = 0, r2 = SIZE - 1, thres = 0.2;
+  for (let i = 0; i < SIZE / 2; i++) {
+    if (Math.abs(buf[i]) < thres) { r1 = i; break; }
+  }
+  for (let i = 1; i < SIZE / 2; i++) {
+    if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; }
+  }
+
+  buf = buf.slice(r1, r2);
+  SIZE = buf.length;
+
+  let c = new Array(SIZE).fill(0);
+  for (let i = 0; i < SIZE; i++) {
+    for (let j = 0; j < SIZE - i; j++) {
+      c[i] = c[i] + buf[j] * buf[j + i];
+    }
+  }
+
+  let d = 0;
+  while (c[d] > c[d + 1]) d++;
+  let maxval = -1, maxpos = -1;
+  for (let i = d; i < SIZE; i++) {
+    if (c[i] > maxval) {
+      maxval = c[i];
+      maxpos = i;
+    }
+  }
+  let T0 = maxpos;
+
+  let x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
+  let a = (x1 + x3 - 2 * x2) / 2;
+  let b = (x3 - x1) / 2;
+  if (a) T0 = T0 - b / (2 * a);
+
+  return sampleRate / T0;
+}
 
 const InteractiveTools = () => {
   const [activeTool, setActiveTool] = useState('metronome');
@@ -45,6 +93,90 @@ const InteractiveTools = () => {
     return audioCtxRef.current;
   };
 
+  // --- Real-time Mic Tuner State ---
+  const [isMicListening, setIsMicListening] = useState(false);
+  const [detectedPitch, setDetectedPitch] = useState(null);
+  const [detectedString, setDetectedString] = useState(null);
+  const [centsDiff, setCentsDiff] = useState(0);
+  const [tunerStatus, setTunerStatus] = useState("Listening for guitar string sound...");
+
+  const micStreamRef = useRef(null);
+  const analyserRef = useRef(null);
+  const micAnimFrameRef = useRef(null);
+
+  const startMicTuner = async () => {
+    try {
+      const ctx = getAudioContext();
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      micStreamRef.current = stream;
+
+      const source = ctx.createMediaStreamSource(stream);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 2048;
+      source.connect(analyser);
+      analyserRef.current = analyser;
+
+      setIsMicListening(true);
+      setTunerStatus("Pluck any guitar string (E A D G B E)...");
+
+      const buf = new Float32Array(2048);
+
+      const updatePitch = () => {
+        analyser.getFloatTimeDomainData(buf);
+        const pitch = autoCorrelate(buf, ctx.sampleRate);
+
+        if (pitch !== -1 && pitch > 60 && pitch < 400) {
+          setDetectedPitch(Math.round(pitch * 10) / 10);
+
+          // Find nearest guitar string
+          let closest = GUITAR_TUNING_STRINGS[0];
+          let minDiff = Math.abs(pitch - closest.freq);
+
+          for (let s of GUITAR_TUNING_STRINGS) {
+            let diff = Math.abs(pitch - s.freq);
+            if (diff < minDiff) {
+              minDiff = diff;
+              closest = s;
+            }
+          }
+
+          setDetectedString(closest);
+
+          // Calculate cents difference
+          const cents = Math.round(1200 * Math.log2(pitch / closest.freq));
+          setCentsDiff(cents);
+
+          if (Math.abs(cents) <= 4) {
+            setTunerStatus("IN TUNE! 🎉");
+          } else if (cents < 0) {
+            setTunerStatus("TOO FLAT (Tighten String 🔼)");
+          } else {
+            setTunerStatus("TOO SHARP (Loosen String 🔽)");
+          }
+        }
+
+        micAnimFrameRef.current = requestAnimationFrame(updatePitch);
+      };
+
+      updatePitch();
+    } catch (err) {
+      console.error("Microphone access error:", err);
+      alert("Microphone permission denied or not available. Please allow microphone access or use Reference Tone mode.");
+    }
+  };
+
+  const stopMicTuner = () => {
+    if (micAnimFrameRef.current) cancelAnimationFrame(micAnimFrameRef.current);
+    if (micStreamRef.current) {
+      micStreamRef.current.getTracks().forEach(track => track.stop());
+    }
+    setIsMicListening(false);
+    setDetectedPitch(null);
+    setDetectedString(null);
+    setCentsDiff(0);
+    setTunerStatus("Listening for guitar string sound...");
+  };
+
   // --- Metronome State ---
   const [bpm, setBpm] = useState(100);
   const [isPlayingMetronome, setIsPlayingMetronome] = useState(false);
@@ -61,7 +193,6 @@ const InteractiveTools = () => {
       osc.type = 'sine';
       osc.frequency.value = isAccent ? 1000 : 800;
 
-      // Audio gain safety clamp (<= 0.25)
       const safeGain = 0.25;
       gainNode.gain.setValueAtTime(safeGain, ctx.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
@@ -95,7 +226,7 @@ const InteractiveTools = () => {
     return () => clearInterval(metronomeTimerRef.current);
   }, [isPlayingMetronome, bpm, timeSignature]);
 
-  // --- Tuner State ---
+  // --- Tuner Reference Tone State ---
   const [activeTuningNote, setActiveTuningNote] = useState(null);
 
   const playTunerTone = (stringObj) => {
@@ -149,7 +280,7 @@ const InteractiveTools = () => {
       const osc = ctx.createOscillator();
       const gainNode = ctx.createGain();
 
-      osc.type = 'triangle'; // Organic keyboard tone
+      osc.type = 'triangle';
       osc.frequency.value = keyObj.freq;
 
       const safeGain = 0.25;
@@ -233,14 +364,14 @@ const InteractiveTools = () => {
             Student <span className="gradient-text">Music Toolkit</span>
           </h2>
           <p className="theme-text-muted">
-            Interactive Web Audio utilities: Metronome, Reference Guitar Tuner, Playable Piano Keyboard Keys, Chord Charts & Trinity Quiz.
+            Interactive Web Audio utilities: Real-time Mic Tuner (GuitarTuna Style), Metronome, Playable Piano Keyboard Keys, Chord Charts & Trinity Quiz.
           </p>
         </div>
 
         {/* Toolkit Nav Buttons */}
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '0.8rem', marginBottom: '3rem' }}>
           <button
-            onClick={() => { stopTunerTone(); setActiveTool('metronome'); }}
+            onClick={() => { stopTunerTone(); stopMicTuner(); setActiveTool('metronome'); }}
             className={`btn ${activeTool === 'metronome' ? 'btn-primary' : 'btn-secondary'}`}
           >
             <Volume2 size={18} /> Metronome
@@ -250,25 +381,25 @@ const InteractiveTools = () => {
             onClick={() => { stopTunerTone(); setActiveTool('tuner'); }}
             className={`btn ${activeTool === 'tuner' ? 'btn-primary' : 'btn-secondary'}`}
           >
-            <Disc size={18} /> Guitar Tuner
+            <Disc size={18} /> GuitarTuna-Style Mic Tuner
           </button>
 
           <button
-            onClick={() => { stopTunerTone(); setActiveTool('keys'); }}
+            onClick={() => { stopTunerTone(); stopMicTuner(); setActiveTool('keys'); }}
             className={`btn ${activeTool === 'keys' ? 'btn-primary' : 'btn-secondary'}`}
           >
             <Music size={18} /> Piano Keys
           </button>
 
           <button
-            onClick={() => { stopTunerTone(); setActiveTool('chords'); }}
+            onClick={() => { stopTunerTone(); stopMicTuner(); setActiveTool('chords'); }}
             className={`btn ${activeTool === 'chords' ? 'btn-primary' : 'btn-secondary'}`}
           >
             <Music size={18} /> Chord Visualizer
           </button>
 
           <button
-            onClick={() => { stopTunerTone(); setActiveTool('quiz'); }}
+            onClick={() => { stopTunerTone(); stopMicTuner(); setActiveTool('quiz'); }}
             className={`btn ${activeTool === 'quiz' ? 'btn-primary' : 'btn-secondary'}`}
           >
             <Award size={18} /> Trinity Quiz
@@ -320,45 +451,138 @@ const InteractiveTools = () => {
           </div>
         )}
 
-        {/* Tool 2: Guitar Reference Tuner */}
+        {/* Tool 2: GuitarTuna-Style Interactive Mic Tuner & Gauge */}
         {activeTool === 'tuner' && (
-          <div className="theme-card" style={{ maxWidth: '650px', margin: '0 auto', padding: '2.5rem', borderRadius: 'var(--radius-lg)', textAlign: 'center' }}>
-            <h3 style={{ fontSize: '1.6rem', marginBottom: '0.5rem' }}>Standard 6-String Reference Guitar Tuner</h3>
-            <p className="theme-text-muted" style={{ marginBottom: '2rem', fontSize: '0.92rem' }}>
-              Click any string to play its exact pitch frequency (E2, A2, D3, G3, B3, E4). Match your guitar string pitch!
-            </p>
+          <div className="theme-card" style={{ maxWidth: '750px', margin: '0 auto', padding: '2.5rem', borderRadius: 'var(--radius-lg)', textAlign: 'center' }}>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <h3 style={{ fontSize: '1.6rem', margin: 0, textAlign: 'left' }}>Interactive GuitarTuna Online Tuner</h3>
+                <p className="theme-text-muted" style={{ margin: 0, fontSize: '0.88rem' }}>
+                  Pluck any string! Detects pitch via microphone in real-time.
+                </p>
+              </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-              {GUITAR_TUNING_STRINGS.map((str, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => playTunerTone(str)}
-                  className="btn"
-                  style={{
-                    padding: '1.2rem',
-                    borderRadius: '14px',
-                    border: activeTuningNote?.note === str.note ? '2px solid var(--primary)' : '1px solid var(--card-dark-border)',
-                    background: activeTuningNote?.note === str.note ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.03)',
-                    color: 'inherit',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.3rem',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--primary)' }}>{str.note}</span>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{str.name}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{str.freq} Hz</span>
+              {!isMicListening ? (
+                <button onClick={startMicTuner} className="btn btn-primary">
+                  <Mic size={18} /> Turn On Mic Auto-Tuner
                 </button>
-              ))}
+              ) : (
+                <button onClick={stopMicTuner} className="btn btn-secondary" style={{ color: '#ef4444' }}>
+                  <MicOff size={18} /> Stop Mic Tuner
+                </button>
+              )}
             </div>
 
-            {activeTuningNote && (
-              <button onClick={stopTunerTone} className="btn btn-secondary">
-                <Square size={16} /> Stop Reference Pitch
-              </button>
-            )}
+            {/* GuitarTuna Visual Dial Gauge */}
+            <div style={{
+              background: 'radial-gradient(circle at 50% 50%, rgba(245,158,11,0.08) 0%, rgba(13,15,20,0.8) 100%)',
+              border: '2px solid var(--card-dark-border)',
+              borderRadius: '20px',
+              padding: '2rem 1.5rem',
+              marginBottom: '2rem',
+              position: 'relative'
+            }}>
+              
+              {/* String Note Target Badge */}
+              <div style={{
+                width: '90px',
+                height: '90px',
+                borderRadius: '50%',
+                margin: '0 auto 1.5rem auto',
+                background: Math.abs(centsDiff) <= 4 && detectedString ? '#10b981' : 'var(--card-dark)',
+                border: `4px solid ${Math.abs(centsDiff) <= 4 && detectedString ? '#10b981' : 'var(--primary)'}`,
+                color: Math.abs(centsDiff) <= 4 && detectedString ? '#ffffff' : 'var(--primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '2.5rem',
+                fontWeight: 800,
+                boxShadow: Math.abs(centsDiff) <= 4 && detectedString ? '0 0 40px #10b981' : '0 0 20px var(--primary-glow)',
+                transition: 'all 0.2s ease'
+              }}>
+                {detectedString ? detectedString.note : "E"}
+              </div>
+
+              {/* Status Banner */}
+              <div style={{
+                fontSize: '1.2rem',
+                fontWeight: 800,
+                color: Math.abs(centsDiff) <= 4 && detectedString ? '#10b981' : Math.abs(centsDiff) > 15 ? '#ef4444' : 'var(--primary)',
+                marginBottom: '1.5rem'
+              }}>
+                {tunerStatus}
+              </div>
+
+              {/* Visual Meter & Needle Bar */}
+              <div style={{ position: 'relative', width: '100%', height: '14px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px', marginBottom: '1.5rem' }}>
+                
+                {/* Center Green Sweet Spot */}
+                <div style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '-4px',
+                  bottom: '-4px',
+                  width: '16px',
+                  transform: 'translateX(-50%)',
+                  background: '#10b981',
+                  borderRadius: '4px',
+                  boxShadow: '0 0 10px #10b981'
+                }} />
+
+                {/* Dynamic Needle Indicator */}
+                <div style={{
+                  position: 'absolute',
+                  top: '-12px',
+                  left: `${Math.min(Math.max(50 + centsDiff * 0.8, 5), 95)}%`,
+                  transform: 'translateX(-50%)',
+                  width: '6px',
+                  height: '38px',
+                  background: Math.abs(centsDiff) <= 4 ? '#10b981' : '#f59e0b',
+                  borderRadius: '3px',
+                  boxShadow: '0 0 15px var(--primary)',
+                  transition: 'left 0.1s ease-out'
+                }} />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#9ca3af', fontWeight: 600 }}>
+                <span>FLAT (-50 cents)</span>
+                <span>IN TUNE (0)</span>
+                <span>SHARP (+50 cents)</span>
+              </div>
+
+              {detectedPitch && (
+                <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--text-dark-muted)' }}>
+                  Detected Pitch Frequency: <strong style={{ color: 'var(--primary)' }}>{detectedPitch} Hz</strong> | Target: {detectedString?.freq} Hz
+                </div>
+              )}
+            </div>
+
+            {/* Reference Pitch Audio Fallback Buttons */}
+            <div style={{ textAlign: 'left' }}>
+              <h4 style={{ fontSize: '1rem', marginBottom: '0.8rem', color: 'var(--primary)' }}>
+                Or Play Pitch Reference Tones (Click to Listen):
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.8rem' }}>
+                {GUITAR_TUNING_STRINGS.map((str, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => playTunerTone(str)}
+                    className="btn btn-secondary btn-sm"
+                    style={{
+                      border: activeTuningNote?.note === str.note ? '2px solid var(--primary)' : '1px solid var(--card-dark-border)',
+                      background: activeTuningNote?.note === str.note ? 'rgba(245,158,11,0.2)' : 'transparent',
+                      color: activeTuningNote?.note === str.note ? 'var(--primary)' : 'inherit',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <span><strong>{str.note}</strong> ({str.name})</span>
+                    <Volume2 size={14} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
           </div>
         )}
 
@@ -370,7 +594,6 @@ const InteractiveTools = () => {
               Click keys to play Western notation & Indian Sargam pitch notes!
             </p>
 
-            {/* Interactive Keyboard Visualizer */}
             <div style={{
               display: 'flex',
               justifyContent: 'center',
