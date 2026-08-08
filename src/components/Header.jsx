@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Music, Moon, Sun, Menu, X, PhoneCall, Award } from 'lucide-react';
+import { Music, Moon, Sun, Menu, X, PhoneCall, Award, Lock } from 'lucide-react';
 import { ACADEMY_INFO } from '../data/academyData';
 
-const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick }) => {
+const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick, onAdminPortalClick }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleTheme = () => {
@@ -75,6 +75,27 @@ const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick }) => {
         {/* Action Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
           
+          {/* Admin Lock Portal Button */}
+          <button
+            onClick={onAdminPortalClick}
+            title="Iyer Sir Admin Portal"
+            style={{
+              background: 'rgba(245, 158, 11, 0.15)',
+              border: '1px solid rgba(245, 158, 11, 0.4)',
+              color: 'var(--primary)',
+              width: '40px',
+              height: '40px',
+              borderRadius: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'background 0.2s'
+            }}
+          >
+            <Lock size={18} />
+          </button>
+
           {/* Dark / Light Mode Toggle */}
           <button
             onClick={toggleTheme}

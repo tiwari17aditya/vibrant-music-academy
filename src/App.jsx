@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
@@ -9,6 +9,8 @@ import InteractiveTools from './components/InteractiveTools';
 import TestimonialsSection from './components/TestimonialsSection';
 import EnrollmentModal from './components/EnrollmentModal';
 import PaymentModal from './components/PaymentModal';
+import AdminPortal from './components/AdminPortal';
+import QuickApproachWidget from './components/QuickApproachWidget';
 import ContactFooter from './components/ContactFooter';
 import { COURSES_DATA } from './data/academyData';
 
@@ -16,10 +18,10 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isEnrollmentOpen, setIsEnrollmentOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [isAdminPortalOpen, setIsAdminPortalOpen] = useState(false);
   const [selectedCourseForModal, setSelectedCourseForModal] = useState(null);
   const [activeEnrollmentData, setActiveEnrollmentData] = useState(null);
 
-  // Smooth scroll handler
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
@@ -47,6 +49,7 @@ function App() {
           isDarkMode={isDarkMode}
           setIsDarkMode={setIsDarkMode}
           onBookDemoClick={() => handleOpenEnrollment(COURSES_DATA[0])}
+          onAdminPortalClick={() => setIsAdminPortalOpen(true)}
         />
 
         <main>
@@ -75,7 +78,7 @@ function App() {
             <SocialHub />
           </ErrorBoundary>
 
-          {/* Interactive Music Toolkit (Metronome, Chord Synth, Quiz) */}
+          {/* Interactive Music Toolkit (Metronome, Guitar Tuner, Piano Keys, Chord Synth, Quiz) */}
           <ErrorBoundary>
             <InteractiveTools />
           </ErrorBoundary>
@@ -92,6 +95,13 @@ function App() {
           <ContactFooter />
         </ErrorBoundary>
 
+        {/* Floating Quick Approach Speed Dial */}
+        <ErrorBoundary>
+          <QuickApproachWidget
+            onBookDemoClick={() => handleOpenEnrollment(COURSES_DATA[0])}
+          />
+        </ErrorBoundary>
+
         {/* Enrollment Modal */}
         {isEnrollmentOpen && (
           <EnrollmentModal
@@ -106,6 +116,13 @@ function App() {
           <PaymentModal
             enrollmentData={activeEnrollmentData}
             onClose={() => setIsPaymentOpen(false)}
+          />
+        )}
+
+        {/* Admin Portal Modal */}
+        {isAdminPortalOpen && (
+          <AdminPortal
+            onClose={() => setIsAdminPortalOpen(false)}
           />
         )}
 
