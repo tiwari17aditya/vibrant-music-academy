@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Guitar, Music, Award, BookOpen, Clock, Check, X, Sparkles } from 'lucide-react';
+import { Guitar, Music, Award, BookOpen, Clock, Check, X, Sparkles, Drum, Mic, Wind, Activity, Radio, Music2, Heart } from 'lucide-react';
 import { COURSES_DATA } from '../data/academyData';
 
 const CoursesSection = ({ onSelectCourseToEnroll }) => {
   const [activeTab, setActiveTab] = useState('All');
   const [selectedCourseDetail, setSelectedCourseDetail] = useState(null);
 
-  const categories = ['All', 'Guitar', 'Keyboard', 'Drums', 'Trinity Prep', 'Music Theory'];
+  const categories = ['All', 'Guitar', 'Drums', 'Keyboard', 'Indian Classical', 'Wind Instruments', 'Vocals & Theory', 'Workshops', 'Strings', 'Dance', 'Trinity Prep'];
 
   const filteredCourses = activeTab === 'All'
     ? COURSES_DATA
@@ -15,7 +15,15 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
   const getIconComponent = (iconName) => {
     switch (iconName) {
       case 'Guitar': return <Guitar size={24} color="#f59e0b" />;
+      case 'Drum': return <Drum size={24} color="#ef4444" />;
       case 'Music': return <Music size={24} color="#3b82f6" />;
+      case 'Activity': return <Activity size={24} color="#10b981" />;
+      case 'Wind': return <Wind size={24} color="#06b6d4" />;
+      case 'Mic': return <Mic size={24} color="#ec4899" />;
+      case 'Sparkles': return <Sparkles size={24} color="#f59e0b" />;
+      case 'Radio': return <Radio size={24} color="#8b5cf6" />;
+      case 'Music2': return <Music2 size={24} color="#6366f1" />;
+      case 'Heart': return <Heart size={24} color="#f43f5e" />;
       case 'Award': return <Award size={24} color="#10b981" />;
       case 'BookOpen': return <BookOpen size={24} color="#ec4899" />;
       default: return <Music size={24} color="#f59e0b" />;
@@ -27,15 +35,15 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
       <div className="container">
         
         {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 3rem auto' }}>
+        <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 3rem auto' }}>
           <span className="badge badge-gold" style={{ marginBottom: '0.8rem' }}>
-            <Sparkles size={14} /> Comprehensive Curriculum
+            <Sparkles size={14} /> Official Brochure Offerings
           </span>
           <h2 className="heading-serif" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            Instrument & <span className="gradient-text">Trinity Certification</span> Programs
+            All 10 Instrument, Vocal & <span className="gradient-text">Dance Programs</span>
           </h2>
           <p className="theme-text-muted">
-            Designed for beginner, intermediate, and advanced students of all age groups. Choose your path below.
+            From Acoustic/Electric Guitar and Drums to Classical Tabla, Violin, Vocals & Kathak/Bharatnatyam. Structured step-by-step guidance for ages 6 to 65.
           </p>
         </div>
 

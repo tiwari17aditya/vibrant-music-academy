@@ -4,6 +4,7 @@ import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import AboutSection from './components/AboutSection';
 import CoursesSection from './components/CoursesSection';
+import InstrumentServicesSection from './components/InstrumentServicesSection';
 import SocialHub from './components/SocialHub';
 import InteractiveTools from './components/InteractiveTools';
 import TestimonialsSection from './components/TestimonialsSection';
@@ -12,6 +13,7 @@ import PaymentModal from './components/PaymentModal';
 import AdminPortal from './components/AdminPortal';
 import QuickApproachWidget from './components/QuickApproachWidget';
 import ContactFooter from './components/ContactFooter';
+import FlyerModal from './components/FlyerModal';
 import { COURSES_DATA } from './data/academyData';
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
   const [isEnrollmentOpen, setIsEnrollmentOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [isAdminPortalOpen, setIsAdminPortalOpen] = useState(false);
+  const [isFlyerModalOpen, setIsFlyerModalOpen] = useState(false);
   const [selectedCourseForModal, setSelectedCourseForModal] = useState(null);
   const [activeEnrollmentData, setActiveEnrollmentData] = useState(null);
 
@@ -50,6 +53,7 @@ function App() {
           setIsDarkMode={setIsDarkMode}
           onBookDemoClick={() => handleOpenEnrollment(COURSES_DATA[0])}
           onAdminPortalClick={() => setIsAdminPortalOpen(true)}
+          onOpenFlyerModal={() => setIsFlyerModalOpen(true)}
         />
 
         <main>
@@ -58,6 +62,7 @@ function App() {
             <HeroSection
               onExploreCoursesClick={() => scrollToSection('courses')}
               onBookDemoClick={() => handleOpenEnrollment(COURSES_DATA[0])}
+              onOpenFlyerModal={() => setIsFlyerModalOpen(true)}
             />
           </ErrorBoundary>
 
@@ -71,6 +76,11 @@ function App() {
             <CoursesSection
               onSelectCourseToEnroll={(course) => handleOpenEnrollment(course)}
             />
+          </ErrorBoundary>
+
+          {/* One-Stop Shop: Instrument Sales, Purchase & Repair */}
+          <ErrorBoundary>
+            <InstrumentServicesSection />
           </ErrorBoundary>
 
           {/* Live Social Media Hub */}
@@ -101,6 +111,14 @@ function App() {
             onBookDemoClick={() => handleOpenEnrollment(COURSES_DATA[0])}
           />
         </ErrorBoundary>
+
+        {/* Official Flyer / Brochure Modal */}
+        {isFlyerModalOpen && (
+          <FlyerModal
+            onClose={() => setIsFlyerModalOpen(false)}
+            onBookDemoClick={() => handleOpenEnrollment(COURSES_DATA[0])}
+          />
+        )}
 
         {/* Enrollment Modal */}
         {isEnrollmentOpen && (

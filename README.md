@@ -8,18 +8,21 @@
 
 ## 📌 Project Overview
 
-**Vibrant Music Academy** is a web application designed to showcase **Iyer Sir’s** music education academy in Ghansoli, Navi Mumbai (400701). It acts as both a digital storefront to attract prospective students across all age groups and a practical platform equipped with free interactive music utilities (Web Audio metronome, guitar chord visualizer with synthesized audio, Trinity exam readiness quiz, social media reels hub, and simulated payment gateway).
+**Vibrant Music Academy** is a web application designed to showcase **Iyer Sir’s** music education academy in Ghansoli, Navi Mumbai (400701). It acts as both a digital storefront to attract prospective students across all age groups and a practical platform equipped with verified real-world brochure details (phone `9065338366`, shop address, 10 instrument & dance programs, instrument sales & repairs, free interactive music utilities, and simulated payment gateway).
 
 This project also serves as a flagship portfolio piece demonstrating modern frontend architecture, state management, CSS custom design tokens, and Web Audio synthesis.
 
 ---
 
-## ✨ Key Features
+## ✨ Key Features (v1.1.0 Updates)
 
+- 📸 **Authentic Brochure Flyer Viewer (`FlyerModal.jsx`)**: High-resolution viewer displaying the original academy pamphlet photo (`/vibrant-details.jpg`).
+- 🏬 **One-Stop Shop: Instrument Sales & Repairs (`InstrumentServicesSection.jsx`)**: Comprehensive desk for new & certified pre-owned instrument sales, trade-in, and professional repair servicing (re-stringing, neck setup, action tuning, drum tuning).
+- 🎶 **Complete 10-Course Catalog**: Filterable curriculum covering Acoustic & Electric Guitar, Drums, Piano, Tabla, Flute, Vocals & Music Theory, Ukulele, Karaoke Nights, Violin, Kathak & Bharatnatyam, and Trinity Certification (Initial to Grade 8).
 - 🎭 **Iyer Sir’s Biography & Legacy**: Highlights his background as a former gym trainer (focusing on playing posture & stamina), acting experience (stage presence), musical family heritage, and Trinity College London certification prep.
 - 📜 **Student Transformation Story**: Features the real journey from YouTube tutorial burnout to confident intermediate guitar playing.
-- 🎶 **Interactive Instrument Courses**: Filterable catalog covering Acoustic & Electric Guitar, Keyboard/Piano, Drums, Trinity Examination Prep (Initial to Grade 8), and Music Theory.
-- 📱 **Live Social Media Hub**: Instagram Reels wall with view/like indicators and embedded YouTube lesson video player modal.
+- 📱 **Live Social Media Hub**: Instagram Reels wall featuring handle `_vibrantbeats_` and embedded YouTube tutorial player modal.
+- 📞 **Verified Contact Line**: Direct booking line **`9065338366`** and WhatsApp dispatch link.
 - 🔊 **Built-in 100% Free Interactive Student Toolkit**:
   - **Web Audio Metronome**: Real-time visual pulse ring and audio click engine (40–240 BPM).
   - **Guitar Chord Visualizer & Synth**: Interactive fretboard diagrams (C, G, Am, F, D, Em) with audio synthesis playback.

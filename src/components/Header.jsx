@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Music, Moon, Sun, Menu, X, PhoneCall, Award, Lock } from 'lucide-react';
-import { ACADEMY_INFO } from '../data/academyData';
+import { Music, Moon, Sun, Menu, X, PhoneCall, Lock, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { ACADEMY_INFO, FLYER_ANNOUNCEMENTS } from '../data/academyData';
 
-const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick, onAdminPortalClick }) => {
+const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick, onAdminPortalClick, onOpenFlyerModal }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleTheme = () => {
@@ -17,6 +17,7 @@ const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick, onAdminPortalClick
   const navLinks = [
     { name: "About Sir", href: "#about" },
     { name: "Courses & Trinity", href: "#courses" },
+    { name: "Sales & Repair", href: "#services" },
     { name: "Social Hub", href: "#social-hub" },
     { name: "Music Tools", href: "#tools" },
     { name: "Testimonials", href: "#testimonials" },
@@ -25,9 +26,42 @@ const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick, onAdminPortalClick
 
   return (
     <header className="glass-nav" style={{ position: 'sticky', top: 0, zIndex: 900 }}>
+      
+      {/* Announcement Ribbon for Annual Discount */}
+      <div style={{
+        background: 'linear-gradient(90deg, #f59e0b 0%, #d97706 50%, #3b82f6 100%)',
+        color: '#0f1015',
+        fontSize: '0.82rem',
+        fontWeight: 700,
+        textAlign: 'center',
+        padding: '0.3rem 1rem',
+        letterSpacing: '0.02em',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.6rem'
+      }}>
+        <span><Sparkles size={14} inline style={{ verticalAlign: 'middle' }} /> "{FLYER_ANNOUNCEMENTS.annualDiscountBanner}"</span>
+        <button
+          onClick={onOpenFlyerModal}
+          style={{
+            background: '#0f1015',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '12px',
+            padding: '0.15rem 0.6rem',
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            cursor: 'pointer'
+          }}
+        >
+          View Pamphlet &rarr;
+        </button>
+      </div>
+
       <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '80px' }}>
         
-        {/* Brand Logo */}
+        {/* Brand Logo with Devanagari Subtitle */}
         <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', color: 'inherit' }}>
           <div style={{
             width: '44px',
@@ -42,17 +76,17 @@ const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick, onAdminPortalClick
             <Music size={24} color="#0f1015" />
           </div>
           <div>
-            <span style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em', display: 'block', lineHeight: 1.1 }}>
+            <span style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em', display: 'block', lineHeight: 1.1 }}>
               VIBRANT <span style={{ color: 'var(--primary)' }}>ACADEMY</span>
             </span>
-            <span style={{ fontSize: '0.72rem', color: 'var(--primary)', fontWeight: 600, letterSpacing: '0.05em' }}>
-              IYER SIR'S MUSIC HUB
+            <span style={{ fontSize: '0.7rem', color: 'var(--primary)', fontWeight: 600, letterSpacing: '0.04em' }}>
+              {ACADEMY_INFO.nameHindi} | IYER SIR
             </span>
           </div>
         </a>
 
         {/* Desktop Navigation Links */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '1.8rem' }} className="desktop-nav">
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }} className="desktop-nav">
           {navLinks.map((link, idx) => (
             <a
               key={idx}
@@ -60,7 +94,7 @@ const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick, onAdminPortalClick
               style={{
                 textDecoration: 'none',
                 color: 'inherit',
-                fontSize: '0.95rem',
+                fontSize: '0.92rem',
                 fontWeight: 500,
                 transition: 'color 0.2s ease'
               }}
@@ -73,8 +107,30 @@ const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick, onAdminPortalClick
         </nav>
 
         {/* Action Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
           
+          {/* View Pamphlet Button */}
+          <button
+            onClick={onOpenFlyerModal}
+            title="View Official Brochure / Pamphlet"
+            className="desktop-nav"
+            style={{
+              background: 'rgba(59, 130, 246, 0.15)',
+              border: '1px solid rgba(59, 130, 246, 0.4)',
+              color: '#3b82f6',
+              padding: '0.45rem 0.8rem',
+              borderRadius: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              cursor: 'pointer'
+            }}
+          >
+            <ImageIcon size={16} /> Official Flyer
+          </button>
+
           {/* Admin Lock Portal Button */}
           <button
             onClick={onAdminPortalClick}
@@ -166,6 +222,27 @@ const Header = ({ isDarkMode, setIsDarkMode, onBookDemoClick, onAdminPortalClick
               {link.name}
             </a>
           ))}
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onOpenFlyerModal();
+            }}
+            style={{
+              background: 'rgba(59, 130, 246, 0.15)',
+              color: '#3b82f6',
+              border: '1px solid #3b82f6',
+              padding: '0.75rem',
+              borderRadius: '10px',
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              cursor: 'pointer'
+            }}
+          >
+            <ImageIcon size={18} /> View Official Academy Flyer
+          </button>
         </div>
       )}
 

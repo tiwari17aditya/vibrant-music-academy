@@ -13,10 +13,13 @@ This document tracks all technology components, open-source libraries, audio API
 - **Changeable Security PIN**: Iyer Sir can change the Admin PIN dynamically during any active session.
 - **Admin Dashboard**: Real-time view of student registrations, fee payment receipts (`VMA-2026-XXXX`), callback inquiries, and CSV export capabilities.
 
-## 3. Open Source UI Components & Floating Quick Approach
+## 3. Open Source UI Components, Authentic Flyer & Quick Approach
 - **Icons**: `lucide-react` (Free, MIT licensed vector icon set)
 - **Typography**: Google Fonts (`Outfit` for sans-serif UI, `Playfair Display` for musical headings)
-- **Quick Approach Speed Dial**: Floating bottom-right widget providing 1-click access to WhatsApp Chat, Direct Phone Call, Free Demo Booking, and Ghansoli Studio Location.
+- **Official Brochure Modal (`FlyerModal.jsx`)**: High-resolution viewer displaying original pamphlet image (`/vibrant-details.jpg`).
+- **One-Stop Shop Services (`InstrumentServicesSection.jsx`)**: Instrument sales, pre-owned gear trade-in, and repair servicing.
+- **Quick Approach Speed Dial**: Floating bottom-right widget providing 1-click access to WhatsApp Chat (`9065338366`), Direct Phone Call (`9065338366`), Free Demo Booking, and Ghansoli Studio Location (`Shop No 1, Plot No-14 Shelter house, Sector 5`).
+- **Social Integration**: Instagram handle `_vibrantbeats_` and YouTube lessons.
 
 ## 4. Audio & Music Engine (100% Free & Native)
 - **Native Browser Web Audio API**:
@@ -28,5 +31,5 @@ This document tracks all technology components, open-source libraries, audio API
 
 ## 5. Security & Stability Guardrails
 - **React Error Boundary**: `src/components/ErrorBoundary.jsx` catching runtime exceptions in sub-components without app crashes.
-- **XSS & Input Sanitization**: Form input filtering for phone numbers (Indian 10-digit format regex) and string escaping.
+- **XSS & Input Sanitization**: Form input filtering for phone numbers (Indian 10-digit format regex: `9065338366`) and string escaping.
 - **Audio Safety Caps**: Maximum decibel/gain clamp on Web Audio API nodes.

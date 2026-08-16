@@ -4,14 +4,19 @@ import { IMAGE_ASSETS, YOUTUBE_EMBED_URLS, SOCIAL_LINKS } from './mediaAssets';
 
 export const ACADEMY_INFO = {
   name: "Vibrant Music Academy",
+  nameHindi: "वाइब्रेंट म्यूजिक एकेडमी",
   tagline: "Master the Art of Music with Iyer Sir",
-  subTagline: "Structured Learning for All Age Groups | Guitar, Keyboard, Drums, Music Theory & Trinity College London Certification",
+  subTagline: "Structured Learning for All Age Groups | Guitar, Piano, Drums, Tabla, Flute, Vocals, Ukulele, Violin, Dance & Trinity Certification",
+  mottoTop: "WHERE PEOPLE MAKE MUSIC...",
+  mottoBottom: "Let's Make Music Together...!",
+  address: "Shop No 1, Plot No-14 Shelter house, Sector 5 Near Union Bank, Ghansoli, Navi Mumbai - 400701",
   location: "Ghansoli, Navi Mumbai, 400701",
-  phone: "+91 98200 12345",
+  phone: "9065338366",
   whatsapp: SOCIAL_LINKS.whatsapp.number,
   email: "contact@vibrantmusicacademy.in",
   instagram: SOCIAL_LINKS.instagram.handle,
   youtube: SOCIAL_LINKS.youtube.handle,
+  trinityCertified: true,
   stats: {
     students: "500+",
     trinityPassRate: "100%",
@@ -19,6 +24,35 @@ export const ACADEMY_INFO = {
     ageGroups: "6 to 65 Yrs"
   }
 };
+
+export const FLYER_ANNOUNCEMENTS = {
+  annualDiscountBanner: "Claim Your Exclusive Annual Discount Before It's Gone",
+  demoClassCallToAction: "Call now to Book your seat for free demo Classes",
+  oneStopShopTitle: "ONE STOP SHOP",
+  oneStopShopSubtitle: "SALE, PURCHASE, AND REPAIR FOR ALL MUSICAL INSTRUMENTS",
+  certificationTitle: "CERTIFICATION THROUGH TRINITY COLLEGE OF LONDON"
+};
+
+export const INSTRUMENT_SERVICES = [
+  {
+    id: "repair-restring",
+    title: "Instrument Repair & Servicing",
+    description: "Professional setup, string replacement, fret polishing, neck alignment, drum tuning, and electronic repairs for all musical instruments.",
+    icon: "Wrench"
+  },
+  {
+    id: "instrument-sales",
+    title: "New & Certified Pre-Owned Instruments",
+    description: "Buy brand new or quality-tested second-hand acoustic guitars, keyboards, violins, ukuleles, and accessories directly at academy prices.",
+    icon: "ShoppingBag"
+  },
+  {
+    id: "instrument-buyback",
+    title: "Sell / Trade-In Your Old Instrument",
+    description: "Upgrade your instrument or sell your old gear for fair value after professional evaluation by Iyer Sir.",
+    icon: "RefreshCw"
+  }
+];
 
 export const IYER_SIR_BIO = {
   name: "Iyer Sir",
@@ -40,99 +74,213 @@ export const IYER_SIR_BIO = {
 
 export const COURSES_DATA = [
   {
-    id: "guitar-foundations",
+    id: "acoustic-electric-guitar",
     category: "Guitar",
-    title: "Guitar Foundations & Intermediate Mastery",
+    title: "Acoustic & Electric Guitar",
     icon: "Guitar",
-    level: "Beginner to Intermediate",
+    level: "Beginner to Advanced",
     duration: "3 Months (24 Classes)",
     fee: "₹4,500 / month",
     numericFee: 4500,
     popular: true,
-    description: "Master acoustic and electric guitar basics, fingerstyle techniques, strumming patterns, fretboard navigation, and popular songs.",
+    description: "Master acoustic and electric guitar basics, fingerstyle techniques, strumming patterns, fretboard navigation, solos, and popular songs.",
     syllabus: [
       "Posture, Hand Positioning & Tuning",
       "Major & Minor Chords + Smooth Transitions",
       "Strumming Patterns & Rhythm Time Signatures",
       "Tablature (TAB) & Sheet Music Reading",
-      "Barre Chords & Fretboard Anatomy",
+      "Barre Chords & Electric Solos / Lead Technique",
       "Song Playing & Live Jamming Sessions"
     ]
   },
   {
-    id: "keyboard-piano",
+    id: "drums-percussion",
+    category: "Drums",
+    title: "Drums & Rhythm Mastery",
+    icon: "Drum",
+    level: "Beginner to Advanced",
+    duration: "3 Months (24 Classes)",
+    fee: "₹5,500 / month",
+    numericFee: 5500,
+    popular: true,
+    description: "Develop rock-solid timing, stick control, groove coordination, drum fills, and playing along with live backing tracks.",
+    syllabus: [
+      "Drum Kit Mechanics & Stick Grips",
+      "Basic Rock, Pop & Funk Grooves",
+      "Limb Independence Exercises",
+      "8th & 16th Note Fills & Dynamic Accents",
+      "Playing to Metronome & Stage Performance Accompaniment"
+    ]
+  },
+  {
+    id: "piano-keyboard",
     category: "Keyboard",
-    title: "Western Piano & Electronic Keyboard",
+    title: "Piano & Electronic Keyboard",
     icon: "Music",
     level: "All Levels",
     duration: "4 Months (32 Classes)",
     fee: "₹5,000 / month",
     numericFee: 5000,
     popular: false,
-    description: "Learn two-handed coordination, scales, chord progressions, classical pieces, and modern pop song accompaniment.",
+    description: "Learn two-handed coordination, scales, chord progressions, Western classical pieces, and modern accompaniment.",
     syllabus: [
       "Keyboard Navigation & Finger Independence",
-      "Treble & Bass Clef Notation",
+      "Treble & Bass Clef Staff Reading",
       "Major/Minor Scales & Arpeggios",
       "Left-Hand Bass Patterns & Right-Hand Melodies",
       "Classical & Contemporary Song Repertory"
     ]
   },
   {
+    id: "tabla",
+    category: "Indian Classical",
+    title: "Tabla & Indian Rhythm",
+    icon: "Activity",
+    level: "Beginner to Intermediate",
+    duration: "3 Months (24 Classes)",
+    fee: "₹4,000 / month",
+    numericFee: 4000,
+    popular: false,
+    description: "Master traditional Indian percussion, hand stroke placement (Bols), Taals (Teentaal, Keharwa, Dadra), and accompaniment skills.",
+    syllabus: [
+      "Tabla Anatomy & Hand Positioning",
+      "Dayan & Bayan Basic Strokes (Na, Tin, Ge, Ke)",
+      "Teentaal, Keharwa & Dadra Variations",
+      "Tihai, Kayda & Tukda Compositions",
+      "Vocal & Instrumental Accompaniment"
+    ]
+  },
+  {
+    id: "flute",
+    category: "Wind Instruments",
+    title: "Flute (Bansuri & Western Flute)",
+    icon: "Wind",
+    level: "Beginner to Advanced",
+    duration: "3 Months (24 Classes)",
+    fee: "₹4,200 / month",
+    numericFee: 4200,
+    popular: false,
+    description: "Master breath control, embouchure, tone production, sargam scales, finger agility, and classical/pop melodies.",
+    syllabus: [
+      "Blowing Technique & Embouchure Precision",
+      "Sargam (Alankars) & Pitch Control",
+      "Finger Placement & Smooth Transitions",
+      "Raga Foundations & Light Music Melodies",
+      "Expression, Microtones (Kanas) & Performance"
+    ]
+  },
+  {
+    id: "vocals-music-theory",
+    category: "Vocals & Theory",
+    title: "Vocals & Music Theory",
+    icon: "Mic",
+    level: "All Levels",
+    duration: "3 Months (24 Classes)",
+    fee: "₹4,500 / month",
+    numericFee: 4500,
+    popular: true,
+    description: "Combine vocal training, pitch correction, breath support, pitch ear training, and fundamental music theory.",
+    syllabus: [
+      "Vocal Warmups, Breath Management & Pitch Matching",
+      "Ear Training & Interval Identification",
+      "Western & Indian Harmony Foundations",
+      "Circle of Fifths & Major/Minor Scales",
+      "Stage Microphone Control & Vocal Delivery"
+    ]
+  },
+  {
+    id: "ukulele",
+    category: "Guitar",
+    title: "Ukulele Foundations",
+    icon: "Sparkles",
+    level: "Beginner",
+    duration: "2 Months (16 Classes)",
+    fee: "₹3,800 / month",
+    numericFee: 3800,
+    popular: false,
+    description: "Fun, portable, and beginner-friendly! Learn ukulele chord shapes, strumming patterns, and sing-along song arrangements.",
+    syllabus: [
+      "Ukulele Tuning & Holding Posture",
+      "Open Chords (C, G, Am, F)",
+      "Pop & Acoustic Strumming Grooves",
+      "Fingerpicking Basics",
+      "Singing While Strumming Complete Songs"
+    ]
+  },
+  {
+    id: "karaoke-nights",
+    category: "Workshops",
+    title: "Karaoke Nights & Stage Confidence",
+    icon: "Radio",
+    level: "All Ages",
+    duration: "Weekend Workshops",
+    fee: "₹2,500 / module",
+    numericFee: 2500,
+    popular: false,
+    description: "Fun, interactive sessions for music lovers and adult learners to overcome stage fright, sing with studio backing tracks, and perform live.",
+    syllabus: [
+      "Microphone Handling & Stage Presence",
+      "Key Matching & Pitch Selection",
+      "Expressive Phrasing & Emotion Control",
+      "Studio Monitor Hearing & Cue Timing",
+      "Live Community Karaoke Showcase"
+    ]
+  },
+  {
+    id: "violin",
+    category: "Strings",
+    title: "Violin Mastery",
+    icon: "Music2",
+    level: "Beginner to Intermediate",
+    duration: "4 Months (32 Classes)",
+    fee: "₹5,200 / month",
+    numericFee: 5200,
+    popular: false,
+    description: "Learn proper bow hold, chin rest posture, pitch accuracy, bowing techniques, and classic instrumental melodies.",
+    syllabus: [
+      "Violin Posture, Chin Rest & Bow Grip",
+      "Open String Bowing & Tone Production",
+      "First Position Finger Placements",
+      "Scales, Sight Reading & Pitch Ear Training",
+      "Solo Melodies & Ensemble Playing"
+    ]
+  },
+  {
+    id: "kathak-bharatnatyam",
+    category: "Dance",
+    title: "Kathak & Bharatnatyam Dance",
+    icon: "Heart",
+    level: "All Age Groups",
+    duration: "4 Months (32 Classes)",
+    fee: "₹4,000 / month",
+    numericFee: 4000,
+    popular: false,
+    description: "Graceful Indian classical dance training focusing on rhythm (Tala), hand gestures (Mudras), footwork (Tatkar), and expressions (Abhinaya).",
+    syllabus: [
+      "Body Posture, Balance & Basic Footwork (Tatkar)",
+      "Hastas / Mudras & Eye Movements",
+      "Teentaal & Jhaptal Rhythmic Cycles",
+      "Abhinaya (Facial Expressions & Storytelling)",
+      "Stage Choreography & Recital Performance"
+    ]
+  },
+  {
     id: "trinity-certification",
     category: "Trinity Prep",
-    title: "Trinity College London Exam Preparation",
+    title: "Trinity College London Certification",
     icon: "Award",
     level: "Initial to Grade 8",
     duration: "6 Months (48 Classes)",
     fee: "₹6,000 / month",
     numericFee: 6000,
     popular: true,
-    description: "Comprehensive training for international Trinity College London certification exams across all instruments.",
+    description: "Comprehensive training for international Trinity College London certification exams across Guitar, Piano, Drums, and Music Theory.",
     syllabus: [
       "Trinity Exam Pieces & Performance Mastery",
       "Technical Work: Scales, Arpeggios & Exercises",
       "Sight Reading & Aural Test Preparation",
       "Musical Knowledge & Performance Confidence",
       "Mock Examination Sessions & Certificate Guidance"
-    ]
-  },
-  {
-    id: "drums-percussion",
-    category: "Drums",
-    title: "Acoustic Drums & Rhythm Mastery",
-    icon: "Drum",
-    level: "Beginner to Advanced",
-    duration: "3 Months (24 Classes)",
-    fee: "₹5,500 / month",
-    numericFee: 5500,
-    popular: false,
-    description: "Develop rock-solid timing, stick control, groove coordination, drum fills, and playing along with backing tracks.",
-    syllabus: [
-      "Drum Kit Mechanics & Stick Grips",
-      "Basic Rock & Pop Grooves",
-      "Limb Independence Exercises",
-      "8th and 16th Note Fills & Dynamic Accents",
-      "Playing to Metronome & Live Song Accompaniment"
-    ]
-  },
-  {
-    id: "music-theory",
-    category: "Music Theory",
-    title: "Applied Music Theory & Ear Training",
-    icon: "BookOpen",
-    level: "All Levels",
-    duration: "2 Months (16 Classes)",
-    fee: "₹3,500 / month",
-    numericFee: 3500,
-    popular: false,
-    description: "Demystify music theory! Understand how scales, chords, keys, intervals, and song structures work together.",
-    syllabus: [
-      "Intervals & Major/Minor Scale Construction",
-      "Chord Building (Triads, 7ths & Extended Chords)",
-      "Circle of Fifths & Key Signatures",
-      "Ear Training & Interval Identification",
-      "Harmonic Analysis & Songwriting Basics"
     ]
   }
 ];

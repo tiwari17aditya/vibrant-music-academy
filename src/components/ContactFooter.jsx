@@ -61,26 +61,28 @@ const ContactFooter = () => {
               }}>
                 <Music size={22} />
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.4rem' }}>{ACADEMY_INFO.name}</h3>
+              <h3 style={{ margin: 0, fontSize: '1.4rem' }}>
+                {ACADEMY_INFO.name} <span style={{ fontSize: '1.05rem', color: 'var(--primary)', fontWeight: 600 }}>({ACADEMY_INFO.nameHindi})</span>
+              </h3>
             </div>
 
             <p className="theme-text-muted" style={{ fontSize: '0.95rem', marginBottom: '1.8rem', lineHeight: 1.6 }}>
-              {ACADEMY_INFO.tagline}. Step into our studio or join our interactive online 1-on-1 sessions.
+              {ACADEMY_INFO.tagline}. Step into our studio in Ghansoli or call us for free demo classes and instrument sales & repairs.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.92rem' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.8rem' }}>
                 <MapPin size={20} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <div>
-                  <strong>Studio Location:</strong><br />
-                  <span className="theme-text-muted">{ACADEMY_INFO.location}</span>
+                  <strong>Studio Address:</strong><br />
+                  <span className="theme-text-muted">{ACADEMY_INFO.address}</span>
                 </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                 <Phone size={20} color="var(--secondary)" style={{ flexShrink: 0 }} />
                 <div>
-                  <strong>Call / Phone:</strong> <span className="theme-text-muted">{ACADEMY_INFO.phone}</span>
+                  <strong>Official Phone:</strong> <span className="theme-text-muted">{ACADEMY_INFO.phone}</span>
                 </div>
               </div>
 
