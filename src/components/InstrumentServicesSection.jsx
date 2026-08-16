@@ -73,6 +73,8 @@ const InstrumentServicesSection = () => {
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 border: '1px solid var(--card-dark-border)',
+                boxSizing: 'border-box',
+                overflow: 'hidden',
                 transition: 'transform 0.3s ease, border-color 0.3s ease'
               }}
             >
@@ -96,13 +98,13 @@ const InstrumentServicesSection = () => {
                 </p>
               </div>
 
-              <div>
+              <div style={{ width: '100%', boxSizing: 'border-box' }}>
                 <a
                   href={`https://wa.me/${ACADEMY_INFO.whatsapp}?text=Hi%20Iyer%20Sir!%20Mujhe%20${encodeURIComponent(srv.title)}%20ke%20baare%20mein%20jaanna%20hai.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-secondary"
-                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                  style={{ width: '100%', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: 0 }}
                 >
                   <Send size={16} /> WhatsApp Par Details Poochein
                 </a>

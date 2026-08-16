@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Guitar, Music, Award, BookOpen, Clock, Check, X, Sparkles, Drum, Mic, Wind, Activity, Radio, Music2, Heart } from 'lucide-react';
-import { COURSES_DATA } from '../data/academyData';
+import { Guitar, Music, Award, BookOpen, Clock, Check, X, Sparkles, Drum, Mic, Wind, Activity, Radio, Music2, Heart, PhoneCall, Tag } from 'lucide-react';
+import { COURSES_DATA, ACADEMY_INFO } from '../data/academyData';
 
 const CoursesSection = ({ onSelectCourseToEnroll }) => {
   const [activeTab, setActiveTab] = useState('All');
   const [selectedCourseDetail, setSelectedCourseDetail] = useState(null);
+  const [selectedGuitarPlanId, setSelectedGuitarPlanId] = useState('3m');
 
   const categories = ['All', 'Guitar', 'Drums', 'Keyboard', 'Indian Classical', 'Wind Instruments', 'Vocals & Theory', 'Workshops', 'Strings', 'Dance', 'Trinity Prep'];
 
@@ -43,7 +44,7 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
             Saare 10 Instrument, Vocal & <span className="gradient-text">Dance Programs</span>
           </h2>
           <p className="theme-text-muted">
-            Guitar aur Drums se lekar Tabla, Flute, Ukulele, Violin aur Kathak/Bharatnatyam tak! Ages 6 se 65 tak sabhi ke liye step-by-step classes.
+            Guitar, Drums, Piano, Tabla, Flute, Ukulele, Violin aur Kathak/Bharatnatyam. Step-by-step guidance for ages 6 to 65.
           </p>
         </div>
 
@@ -79,118 +80,222 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
         {/* Course Cards Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
           gap: '2rem'
         }}>
-          {filteredCourses.map((course) => (
-            <div
-              key={course.id}
-              className="theme-card"
-              style={{
-                borderRadius: 'var(--radius-lg)',
-                padding: '2rem',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                position: 'relative',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-              }}
-            >
-              {course.popular && (
-                <div style={{
-                  position: 'absolute',
-                  top: '-12px',
-                  right: '1.5rem',
-                  background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                  color: '#0f1015',
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  padding: '0.2rem 0.8rem',
-                  borderRadius: '12px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
-                }}>
-                  Popular Batch
-                </div>
-              )}
+          {filteredCourses.map((course) => {
+            const isGuitar = course.isGuitar;
+            const currentGuitarPlan = isGuitar
+              ? course.pricingTiers.find(p => p.id === selectedGuitarPlanId) || course.pricingTiers[1]
+              : null;
 
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1.2rem' }}>
+            return (
+              <div
+                key={course.id}
+                className="theme-card"
+                style={{
+                  borderRadius: 'var(--radius-lg)',
+                  padding: '2rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  position: 'relative',
+                  border: isGuitar ? '1px solid var(--primary)' : '1px solid var(--card-dark-border)',
+                  boxShadow: isGuitar ? '0 10px 30px rgba(245, 158, 11, 0.12)' : 'none',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                }}
+              >
+                {course.popular && (
                   <div style={{
-                    padding: '0.75rem',
+                    position: 'absolute',
+                    top: '-12px',
+                    right: '1.5rem',
+                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    color: '#0f1015',
+                    fontSize: '0.75rem',
+                    fontWeight: 800,
+                    padding: '0.2rem 0.8rem',
                     borderRadius: '12px',
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}>
+                    {isGuitar ? 'Special Fee Offer' : 'Popular Program'}
+                  </div>
+                )}
+
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1.2rem' }}>
+                    <div style={{
+                      padding: '0.75rem',
+                      borderRadius: '12px',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      {getIconComponent(course.icon)}
+                    </div>
+                    <div>
+                      <span className="badge badge-blue">{course.level}</span>
+                    </div>
+                  </div>
+
+                  <h3 style={{ fontSize: '1.35rem', marginBottom: '0.6rem' }}>{course.title}</h3>
+                  <p className="theme-text-muted" style={{ fontSize: '0.92rem', marginBottom: '1.2rem', lineHeight: 1.55 }}>
+                    {course.description}
+                  </p>
+
+                  {/* Guitar Specific Plan Selection Tabs */}
+                  {isGuitar && (
+                    <div style={{
+                      background: 'rgba(255,255,255,0.03)',
+                      padding: '0.8rem',
+                      borderRadius: '12px',
+                      marginBottom: '1.2rem',
+                      border: '1px solid rgba(245, 158, 11, 0.2)'
+                    }}>
+                      <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <Tag size={14} /> Select Guitar Fee Plan (Duration Tiers):
+                      </div>
+                      
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.35rem', marginBottom: '0.4rem' }}>
+                        {course.pricingTiers.slice(0, 3).map((tier) => (
+                          <button
+                            key={tier.id}
+                            onClick={() => setSelectedGuitarPlanId(tier.id)}
+                            style={{
+                              padding: '0.4rem 0.2rem',
+                              borderRadius: '6px',
+                              fontSize: '0.75rem',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              border: selectedGuitarPlanId === tier.id ? '1px solid var(--primary)' : '1px solid var(--card-dark-border)',
+                              background: selectedGuitarPlanId === tier.id ? 'var(--primary)' : 'rgba(255,255,255,0.05)',
+                              color: selectedGuitarPlanId === tier.id ? '#0f1015' : 'inherit'
+                            }}
+                          >
+                            {tier.id === '1m' ? '1 Month' : tier.id === '3m' ? '3 Months' : '6 Months'}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.35rem' }}>
+                        {course.pricingTiers.slice(3, 5).map((tier) => (
+                          <button
+                            key={tier.id}
+                            onClick={() => setSelectedGuitarPlanId(tier.id)}
+                            style={{
+                              padding: '0.4rem 0.2rem',
+                              borderRadius: '6px',
+                              fontSize: '0.75rem',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              border: selectedGuitarPlanId === tier.id ? '1px solid var(--primary)' : '1px solid var(--card-dark-border)',
+                              background: selectedGuitarPlanId === tier.id ? 'var(--primary)' : 'rgba(255,255,255,0.05)',
+                              color: selectedGuitarPlanId === tier.id ? '#0f1015' : 'inherit'
+                            }}
+                          >
+                            {tier.id === '9m' ? '9 Months' : '12M (1 Year)'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    gap: '0.5rem',
+                    fontSize: '0.88rem',
+                    marginBottom: '1.2rem',
+                    color: 'var(--primary)'
                   }}>
-                    {getIconComponent(course.icon)}
+                    <Clock size={16} /> {isGuitar ? currentGuitarPlan.durationText : course.duration}
                   </div>
-                  <div>
-                    <span className="badge badge-blue">{course.level}</span>
-                  </div>
-                </div>
 
-                <h3 style={{ fontSize: '1.35rem', marginBottom: '0.8rem' }}>{course.title}</h3>
-                <p className="theme-text-muted" style={{ fontSize: '0.92rem', marginBottom: '1.5rem', lineHeight: 1.55 }}>
-                  {course.description}
-                </p>
-
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  fontSize: '0.88rem',
-                  marginBottom: '1.5rem',
-                  color: 'var(--primary)'
-                }}>
-                  <Clock size={16} /> {course.duration}
-                </div>
-
-                {/* Syllabus Checklist preview */}
-                <div style={{ marginBottom: '2rem' }}>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.6rem', color: 'var(--text-dark-muted)' }}>
-                    Syllabus ke Highlights:
-                  </div>
-                  {course.syllabus.slice(0, 3).map((item, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.88rem', marginBottom: '0.4rem' }}>
-                      <Check size={14} color="#10b981" /> {item}
+                  {/* Syllabus Checklist preview */}
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <div style={{ fontSize: '0.82rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-dark-muted)' }}>
+                      Syllabus Highlights:
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  justifyContent: 'space-between',
-                  marginBottom: '1.2rem',
-                  paddingTop: '1rem',
-                  borderTop: '1px solid var(--card-dark-border)'
-                }}>
-                  <div>
-                    <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--primary)' }}>{course.fee}</span>
+                    {course.syllabus.slice(0, 3).map((item, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+                        <Check size={14} color="#10b981" /> {item}
+                      </div>
+                    ))}
                   </div>
-                  <button
-                    onClick={() => setSelectedCourseDetail(course)}
-                    style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer', fontSize: '0.88rem', fontWeight: 600 }}
-                  >
-                    Full Syllabus &rarr;
-                  </button>
                 </div>
 
-                <button
-                  onClick={() => onSelectCourseToEnroll(course)}
-                  className="btn btn-primary"
-                  style={{ width: '100%' }}
-                >
-                  Free Demo Seat Book Karein
-                </button>
-              </div>
+                {/* Price Display & Action Button */}
+                <div>
+                  <div style={{
+                    paddingTop: '1rem',
+                    borderTop: '1px solid var(--card-dark-border)',
+                    marginBottom: '1rem'
+                  }}>
+                    {isGuitar ? (
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.6rem', flexWrap: 'wrap' }}>
+                          {currentGuitarPlan.formattedOriginal && (
+                            <span style={{ fontSize: '1.05rem', color: '#9ca3af', textDecoration: 'line-through', fontWeight: 600 }}>
+                              {currentGuitarPlan.formattedOriginal}
+                            </span>
+                          )}
+                          <span style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--primary)' }}>
+                            {currentGuitarPlan.formattedPrice}
+                          </span>
+                          {currentGuitarPlan.savings && (
+                            <span style={{ fontSize: '0.78rem', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '0.15rem 0.5rem', borderRadius: '6px', fontWeight: 700 }}>
+                              {currentGuitarPlan.savings}
+                            </span>
+                          )}
+                        </div>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-dark-muted)', marginTop: '0.2rem' }}>
+                          {currentGuitarPlan.label}
+                        </div>
+                      </div>
+                    ) : (
+                      /* Other Instruments Professional Fee Contact Notice */
+                      <div style={{
+                        background: 'rgba(59, 130, 246, 0.08)',
+                        border: '1px dashed rgba(59, 130, 246, 0.3)',
+                        padding: '0.75rem',
+                        borderRadius: '8px'
+                      }}>
+                        <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#3b82f6', marginBottom: '0.2rem' }}>
+                          Fee Details & Customized Packages
+                        </div>
+                        <div style={{ fontSize: '0.82rem', color: 'var(--text-dark-muted)' }}>
+                          Rs. Contact Academy for Fee Details & Batch Timing
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-            </div>
-          ))}
+                  <div style={{ display: 'flex', gap: '0.6rem' }}>
+                    <button
+                      onClick={() => setSelectedCourseDetail(course)}
+                      style={{ background: 'none', border: '1px solid var(--card-dark-border)', color: 'inherit', padding: '0.5rem 0.75rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600 }}
+                    >
+                      Syllabus
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        const courseWithPlan = isGuitar ? { ...course, selectedPlan: currentGuitarPlan } : course;
+                        onSelectCourseToEnroll(courseWithPlan);
+                      }}
+                      className="btn btn-primary"
+                      style={{ flex: 1, fontSize: '0.88rem' }}
+                    >
+                      {isGuitar ? 'Book Free Demo' : 'Contact for Fee Details'}
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            );
+          })}
         </div>
 
       </div>
@@ -241,7 +346,7 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
                 }}
                 className="btn btn-primary"
               >
-                Demo Class Book Karein ({selectedCourseDetail.fee})
+                Demo Class / Contact Karein
               </button>
             </div>
 

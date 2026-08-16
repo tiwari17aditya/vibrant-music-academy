@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, PhoneCall, Calendar, MapPin, Sparkles } from 'lucide-react';
+import { X, CheckCircle, PhoneCall, Calendar, MapPin, Sparkles, Tag } from 'lucide-react';
 import { ACADEMY_INFO } from '../data/academyData';
 import { saveInquiry } from '../utils/inquiryStorage';
 
@@ -12,12 +12,16 @@ const EnrollmentModal = ({ preSelectedCourse, onClose }) => {
     e.preventDefault();
     if (!name || !phone) return;
 
-    const courseTitle = preSelectedCourse ? preSelectedCourse.title : 'General Demo Class';
+    let courseTitle = preSelectedCourse ? preSelectedCourse.title : 'General Demo Class';
+    if (preSelectedCourse && preSelectedCourse.selectedPlan) {
+      courseTitle += ` (${preSelectedCourse.selectedPlan.label} - ${preSelectedCourse.selectedPlan.formattedPrice})`;
+    }
+
     const success = saveInquiry({
       name,
       phone,
       course: courseTitle,
-      source: 'Free Demo Seat Booking'
+      source: 'Free Demo / Fee Inquiry Modal'
     });
 
     if (success) {
@@ -44,10 +48,10 @@ const EnrollmentModal = ({ preSelectedCourse, onClose }) => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--card-dark-border)', paddingBottom: '1rem' }}>
           <div>
             <span className="badge badge-gold" style={{ marginBottom: '0.4rem' }}>
-              <Sparkles size={13} /> Official Seat Booking
+              <Sparkles size={13} /> Official Academy Inquiry
             </span>
             <h3 style={{ margin: 0, fontSize: '1.4rem' }}>
-              Free Demo Class Book Karein
+              Free Demo & Fee Inquiry
             </h3>
           </div>
           <button
@@ -84,9 +88,9 @@ const EnrollmentModal = ({ preSelectedCourse, onClose }) => {
               <CheckCircle size={38} color="#10b981" />
             </div>
             
-            <h4 style={{ fontSize: '1.4rem', margin: '0 0 0.5rem 0' }}>Seat Registration Confirmed! 🎉</h4>
+            <h4 style={{ fontSize: '1.4rem', margin: '0 0 0.5rem 0' }}>Inquiry Confirmed! 🎉</h4>
             <p className="theme-text-muted" style={{ fontSize: '0.95rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>
-              Aapki seat booking request Iyer Sir ke paas submit ho gayi hai. Iyer Sir jaldi hi <strong>{phone}</strong> par call karke batch timing confirm karenge.
+              Aapki request Iyer Sir ke paas submit ho gayi hai. Iyer Sir jaldi hi <strong>{phone}</strong> par call karke batch timings aur fee details share karenge.
             </p>
 
             <div style={{ background: 'rgba(255,255,255,0.04)', padding: '1rem', borderRadius: '12px', textAlign: 'left', marginBottom: '1.5rem', fontSize: '0.88rem' }}>
@@ -113,16 +117,28 @@ const EnrollmentModal = ({ preSelectedCourse, onClose }) => {
                 borderRadius: '12px',
                 fontSize: '0.92rem'
               }}>
-                <div style={{ color: 'var(--primary)', fontWeight: 700, marginBottom: '0.2rem' }}>Selected Course:</div>
+                <div style={{ color: 'var(--primary)', fontWeight: 700, marginBottom: '0.2rem' }}>Selected Program:</div>
                 <div style={{ fontWeight: 800, fontSize: '1.05rem' }}>{preSelectedCourse.title}</div>
-                <div style={{ color: 'var(--text-dark-muted)', fontSize: '0.85rem', marginTop: '0.2rem' }}>
-                  Fee: {preSelectedCourse.fee} | Duration: {preSelectedCourse.duration}
-                </div>
+                
+                {preSelectedCourse.selectedPlan ? (
+                  <div style={{ color: '#10b981', fontWeight: 700, fontSize: '0.9rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <Tag size={14} /> {preSelectedCourse.selectedPlan.label}: {preSelectedCourse.selectedPlan.formattedPrice}
+                    {preSelectedCourse.selectedPlan.formattedOriginal && (
+                      <span style={{ color: '#9ca3af', textDecoration: 'line-through', fontSize: '0.8rem' }}>
+                        {preSelectedCourse.selectedPlan.formattedOriginal}
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <div style={{ color: 'var(--text-dark-muted)', fontSize: '0.85rem', marginTop: '0.2rem' }}>
+                    {preSelectedCourse.fee}
+                  </div>
+                )}
               </div>
             )}
 
             <div style={{ fontSize: '0.88rem', color: 'var(--text-dark-muted)', background: 'rgba(255,255,255,0.03)', padding: '0.75rem', borderRadius: '8px' }}>
-              🔒 <strong>Safe In-Person Registration:</strong> Online payment ki zaroorat nahi hai. Demo class studio aakar attend karein.
+              🔒 <strong>Safe Studio Registration:</strong> Online payment ki zaroorat nahi hai. Demo class studio aakar attend karein.
             </div>
 
             <div>
@@ -170,7 +186,7 @@ const EnrollmentModal = ({ preSelectedCourse, onClose }) => {
             </div>
 
             <button type="submit" className="btn btn-primary btn-lg" style={{ marginTop: '0.5rem', width: '100%' }}>
-              <Calendar size={18} /> Free Demo Seat Reserve Karein
+              <Calendar size={18} /> Submit Demo & Fee Inquiry
             </button>
 
           </form>

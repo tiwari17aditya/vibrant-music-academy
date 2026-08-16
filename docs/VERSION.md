@@ -2,7 +2,14 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH).
 
-## Current Version: `1.2.0` (Hinglish Edition, UI Fixes, Inquiry DB & Fraud Prevention)
+## Current Version: `1.2.1` (Guitar Multi-Tier Pricing, Fee Refactoring & Global Box-Model Fixes)
+
+### [1.2.1] - 2026-08-16
+- **Added & Refactored**:
+  - **Guitar Flexible Multi-Tier Pricing**: Configured Acoustic & Electric Guitar with 5 tier packages: 1 Month (₹2,499), 3 Months (₹6,999, Save ₹498), 6 Months (₹12,999, Save ₹1,995), 9 Months (₹18,999, Save ₹3,492), and 12 Months (₹23,999, Save ₹5,989).
+  - **Custom Course Fee Structure**: Updated non-guitar courses to state `"Rs. Contact Academy for Fee Details"` with custom inquiry handling.
+  - **Global CSS & Layout Safety**: Added `box-sizing: border-box` globally in `index.css` and adjusted button margins and container widths in `InstrumentServicesSection.jsx`, `CoursesSection.jsx`, and `EnrollmentModal.jsx`.
+  - **Production Build Verification**: Passed clean `cmd.exe /c npm run build` (1,808 modules, 0 errors).
 
 ### [1.2.0] - 2026-08-16
 - **Added & Refactored**:

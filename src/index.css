@@ -43,6 +43,10 @@
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* Default Dark Theme */
 body {
   margin: 0;

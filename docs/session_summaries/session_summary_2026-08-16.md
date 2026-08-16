@@ -1,40 +1,43 @@
 # Session Summary Log - 2026-08-16
 
 ## Overview
-Comprehensive authentic flyer integration (`vibrant-details`), header UI distortion fixes, pure Hinglish copy refactoring, sample video removal, database inquiry system (`inquiryStorage.js`), fraud prevention (online payment & QR code removal), modular social media architecture, and complete end-of-session packup for **Vibrant Music Academy Web Application**.
+Comprehensive authentic flyer integration (`vibrant-details`), header UI distortion fixes, pure Hinglish copy refactoring, sample video removal, database inquiry system (`inquiryStorage.js`), fraud prevention (online payment & QR code removal), modular social media architecture, **Guitar Multi-Tier Pricing (1M to 12M)**, **Course Fee Refactoring**, and complete end-of-session packup for **Vibrant Music Academy Web Application**.
 
 ---
 
 ## Key Achievements & Modifications
 
-### 1. 🎨 UI & Header Distortion Fix
+### 1. 🎸 Guitar Multi-Tier Pricing Packages
+- Added 5 duration pricing tiers for Acoustic & Electric Guitar in `src/data/academyData.js`:
+  - 1 Month: ₹2,499 (Standard)
+  - 3 Months: ₹6,999 (*Save ₹498*)
+  - 6 Months: ₹12,999 (*Save ₹1,995*)
+  - 9 Months: ₹18,999 (*Save ₹3,492*)
+  - 12 Months: ₹23,999 (*Save ₹5,989*)
+
+### 2. 🎼 Custom Course Fee Refactoring
+- Updated all non-guitar programs (Drums, Piano, Tabla, Flute, Vocals, Ukulele, Studio Karaoke, Violin, Kathak, Trinity Certification) to state `"Rs. Contact Academy for Fee Details"` with direct callback inquiry integration.
+
+### 3. 🎨 UI Layout & CSS Box-Model Guardrails
+- Added global `box-sizing: border-box` in `src/index.css`.
+- Fixed button width and container padding alignment across `InstrumentServicesSection.jsx`, `CoursesSection.jsx`, and `EnrollmentModal.jsx`.
+
+### 4. 🎨 UI & Header Distortion Fix
 - Fixed sticky header layout (`76px`) and flex alignment by moving the top announcement ribbon above `<Header>` in `App.jsx`.
 - Removed Devanagari logo text to eliminate line-wrapping and overlap.
 
-### 2. 🗣️ Pure Hinglish Content (No Devanagari Script)
+### 5. 🗣️ Pure Hinglish Content (No Devanagari Script)
 - Converted all application titles, descriptions, bios, course modules, and CTAs across all components into natural, friendly **Hinglish** (Latin script, zero Devanagari script).
 
-### 3. 🎬 Sample Video Removal
-- Removed all sample YouTube video embeds, video player modals, and fake video feeds from `SocialHub.jsx` and `mediaAssets.js`.
-
-### 4. 🗄️ Database Inquiry Storage (Name + Phone Only)
+### 6. 🗄️ Database Inquiry Storage & Fraud Prevention
 - Built `src/utils/inquiryStorage.js` client-side database persistence for student callback inquiries (Name + Phone + Timestamp + Source).
-- Simplified Header Demo Modal, Instrument Service Desk, and Footer Contact forms to strictly require Name and 10-digit Phone Number only.
-- Updated `AdminPortal.jsx` (PIN: `1234`) so Iyer Sir can view stored student callbacks with 1-click **CSV Export**.
-
-### 5. 🚫 Fraud Prevention Architecture
-- Completely removed online payment modals, UPI QR codes, VPAs, and credit card inputs. Replaced with direct Free Demo Seat Reservation requiring Name & Phone only.
-
-### 6. 📱 Modular Social Media System
-- Refactored `MODULAR_SOCIAL_PLATFORMS` in `mediaAssets.js` into an extensible array schema currently displaying Instagram (`_vibrantbeats_`), with support for adding future social platforms effortlessly.
-
-### 7. 📸 Authentic Pamphlet Integration (`vibrant-details`)
-- Converted original HEIC pamphlet photo (`vibrant-details`) into `public/vibrant-details.jpg`.
-- Integrated verified real-world details: Phone `9065338366`, shop address, 10 brochure courses, `InstrumentServicesSection.jsx`, and `FlyerModal.jsx`.
+- Simplified forms strictly to Name and 10-digit Phone Number. Updated `AdminPortal.jsx` (PIN: `1234`) with CSV Export.
+- Completely removed online payment modals, UPI QR codes, VPAs, and credit card inputs for security.
 
 ---
 
 ## Verification & Build Metrics
-- **Vite Production Build**: Executed `cmd.exe /c npm run build` — **PASSED** (0 errors, 1808 modules transformed, built in 16.23s).
-- **Documentation**: Updated `VERSION.md` (v1.2.0), `TECH_STACK.md`, `README.md`, `logs_2026-08-16.md`, and `session_summary_2026-08-16.md`.
+- **Vite Production Build**: Executed `cmd.exe /c npm run build` — **PASSED** (0 errors, 1,808 modules transformed, built in 32.91s).
+- **Documentation**: Updated `VERSION.md` (v1.2.1), `TECH_STACK.md`, `README.md`, `logs_2026-08-16.md`, and `session_summary_2026-08-16.md`.
 - **Git & GitHub Synchronization**: Staged, committed, and pushed to `https://github.com/tiwari17aditya/vibrant-music-academy.git` (`branch: main`).
+
