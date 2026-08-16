@@ -2,19 +2,27 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH).
 
-## Current Version: `1.1.0` (Authentic Brochure Integration & 10-Course Catalog)
+## Current Version: `1.2.0` (Hinglish Edition, UI Fixes, Inquiry DB & Fraud Prevention)
+
+### [1.2.0] - 2026-08-16
+- **Added & Refactored**:
+  - **UI & Header Distortion Fix**: Fixed sticky header layout (`76px`), flex alignment, and moved top ribbon above header container to eliminate line-wrapping and overlap.
+  - **Pure Hinglish Content**: Converted all UI copy, titles, course descriptions, bio, and CTAs across all components into natural **Hinglish** (Latin script, zero Devanagari script).
+  - **Sample Videos Removal**: Removed all sample YouTube video embeds, video player modals, and fake video feeds.
+  - **Database Inquiry System (`inquiryStorage.js`)**: Built client-side database persistence for student callback inquiries (Name + Phone + Timestamp + Source).
+  - **Simplified Name & Phone Forms**: Refactored Header Demo Modal, Instrument Service Desk, and Footer Contact forms to strictly require Name and 10-digit Phone Number only.
+  - **Fraud Prevention**: Completely removed online payment modals, UPI QR codes, VPAs, and credit card inputs. Replaced with direct Free Demo Seat Reservation.
+  - **Modular Social Architecture**: Modularized `MODULAR_SOCIAL_PLATFORMS` in `mediaAssets.js` for Instagram (`_vibrantbeats_`) and future platform additions.
+  - Verified production build (`cmd.exe /c npm run build` — 0 errors).
 
 ### [1.1.0] - 2026-08-16
 - **Added & Updated**:
   - Extracted and integrated authentic real-world data from the official academy brochure flyer (`vibrant-details`).
   - Updated primary inquiry line to **`9065338366`** across all components, headers, footers, and modals.
-  - Updated Instagram handle to **`_vibrantbeats_`** (removed `@`).
+  - Updated Instagram handle to **`_vibrantbeats_`**.
   - Updated studio address to **`Shop No 1, Plot No-14 Shelter house, Sector 5 Near Union Bank, Ghansoli, Navi Mumbai - 400701`**.
-  - Added Devanagari Hindi branding **`वाइब्रेंट म्यूजिक एकेडमी`** and flyer motto (*"WHERE PEOPLE MAKE MUSIC..."*).
-  - Expanded course catalog to all **10 authentic brochure programs**: Acoustic & Electric Guitar, Drums, Piano, Tabla, Flute, Vocals & Music Theory, Ukulele, Karaoke Nights, Violin, Kathak & Bharatnatyam, and Trinity Certification.
-  - Built **`InstrumentServicesSection.jsx`**: One-Stop Shop for instrument sales, pre-owned gear trade-in, and repair servicing.
-  - Built **`FlyerModal.jsx`**: Interactive viewer displaying the original converted brochure image (`/vibrant-details.jpg`).
-  - Verified production build (`cmd.exe /c npm run build` — 0 errors).
+  - Expanded course catalog to all **10 authentic brochure programs**.
+  - Built **`InstrumentServicesSection.jsx`** and **`FlyerModal.jsx`**.
 
 ### [1.0.0] - 2026-08-08
 - **Added**:

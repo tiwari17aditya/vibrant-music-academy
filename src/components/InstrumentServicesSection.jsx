@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { ShoppingBag, Wrench, RefreshCw, Sparkles, Send, CheckCircle, PhoneCall } from 'lucide-react';
 import { ACADEMY_INFO, INSTRUMENT_SERVICES, FLYER_ANNOUNCEMENTS } from '../data/academyData';
+import { saveInquiry } from '../utils/inquiryStorage';
 
 const InstrumentServicesSection = () => {
-  const [serviceType, setServiceType] = useState('repair');
-  const [instrumentName, setInstrumentName] = useState('');
   const [contactName, setContactName] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -12,13 +11,22 @@ const InstrumentServicesSection = () => {
   const handleInquirySubmit = (e) => {
     e.preventDefault();
     if (!contactName || !contactPhone) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      setInstrumentName('');
-      setContactName('');
-      setContactPhone('');
-      setSubmitted(false);
-    }, 4000);
+    
+    const success = saveInquiry({
+      name: contactName,
+      phone: contactPhone,
+      course: 'Instrument Repair & Sales Desk',
+      source: 'Instrument Services Desk'
+    });
+
+    if (success) {
+      setSubmitted(true);
+      setTimeout(() => {
+        setContactName('');
+        setContactPhone('');
+        setSubmitted(false);
+      }, 4000);
+    }
   };
 
   const getServiceIcon = (iconName) => {
@@ -42,8 +50,8 @@ const InstrumentServicesSection = () => {
           <h2 className="heading-serif" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             {FLYER_ANNOUNCEMENTS.oneStopShopTitle}: <span className="gradient-text">Sales, Purchase & Repair</span>
           </h2>
-          <p className="theme-text-muted" style={{ fontSize: '1.1rem' }}>
-            {FLYER_ANNOUNCEMENTS.oneStopShopSubtitle}. Professional instrument maintenance, setup, re-stringing, and sales backed by Iyer Sir's 15+ years of musical expertise.
+          <p className="theme-text-muted" style={{ fontSize: '1.05rem' }}>
+            {FLYER_ANNOUNCEMENTS.oneStopShopSubtitle}. Instrument tuning, setup, re-stringing aur repairs Iyer Sir ke 15+ years experience ke saath.
           </p>
         </div>
 
@@ -90,20 +98,20 @@ const InstrumentServicesSection = () => {
 
               <div>
                 <a
-                  href={`https://wa.me/${ACADEMY_INFO.whatsapp}?text=Hi%20Iyer%20Sir!%20I%20am%20interested%20in%20${encodeURIComponent(srv.title)}.`}
+                  href={`https://wa.me/${ACADEMY_INFO.whatsapp}?text=Hi%20Iyer%20Sir!%20Mujhe%20${encodeURIComponent(srv.title)}%20ke%20baare%20mein%20jaanna%20hai.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-secondary"
                   style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                 >
-                  <Send size={16} /> Request Quote on WhatsApp
+                  <Send size={16} /> WhatsApp Par Details Poochein
                 </a>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Quick Service Inquiry Box */}
+        {/* Quick Service Inquiry Box (Name & Phone Only) */}
         <div className="theme-card" style={{
           padding: '2.5rem',
           borderRadius: 'var(--radius-lg)',
@@ -116,16 +124,16 @@ const InstrumentServicesSection = () => {
         }}>
           <div>
             <span className="badge badge-blue" style={{ marginBottom: '0.8rem' }}>
-              Instrument Doctor Desk
+              Instrument Repair Desk
             </span>
             <h3 style={{ fontSize: '1.8rem', marginBottom: '0.8rem' }}>
-              Need Urgent Guitar Setup or Instrument Repair?
+              Guitar Repair ya Instrument Servicing Chahiye?
             </h3>
             <p className="theme-text-muted" style={{ fontSize: '0.98rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>
-              Drop your instrument at our Ghansoli studio (Shop No 1, Plot No-14 Shelter house, Sector 5) for quick turn-around servicing, action tuning, bridge repair, or fret leveling.
+              Apna instrument Ghansoli studio (Shop No 1, Plot No-14 Shelter house, Sector 5) par laayein fast turnaround repair, action tuning aur string replacement ke liye.
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--primary)', fontWeight: 700, fontSize: '1.1rem' }}>
-              <PhoneCall size={22} /> Call Direct: {ACADEMY_INFO.phone}
+              <PhoneCall size={22} /> Direct Call: {ACADEMY_INFO.phone}
             </div>
           </div>
 
@@ -133,48 +141,30 @@ const InstrumentServicesSection = () => {
             {submitted ? (
               <div style={{ textAlign: 'center', padding: '2rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '14px', border: '1px solid #10b981' }}>
                 <CheckCircle size={44} color="#10b981" style={{ marginBottom: '0.8rem' }} />
-                <h4 style={{ margin: '0 0 0.4rem 0', fontSize: '1.2rem' }}>Service Inquiry Received!</h4>
+                <h4 style={{ margin: '0 0 0.4rem 0', fontSize: '1.2rem' }}>Inquiry Receive Ho Gayi!</h4>
                 <p className="theme-text-muted" style={{ fontSize: '0.9rem', margin: 0 }}>
-                  Iyer Sir will call you shortly regarding your instrument service request.
+                  Iyer Sir jaldi hi aapko call karenge.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
-                    Select Service Required
-                  </label>
-                  <select
-                    value={serviceType}
-                    onChange={(e) => setServiceType(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.7rem',
-                      borderRadius: '8px',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid var(--card-dark-border)',
-                      color: 'inherit'
-                    }}
-                  >
-                    <option value="repair" style={{ background: '#141721' }}>Instrument Repair / Servicing</option>
-                    <option value="buy" style={{ background: '#141721' }}>Buy New / Certified Used Instrument</option>
-                    <option value="sell" style={{ background: '#141721' }}>Sell / Exchange Old Instrument</option>
-                  </select>
+                <div style={{ fontSize: '0.9rem', color: 'var(--primary)', fontWeight: 600 }}>
+                  📝 Apni Details Fill Karein (Only Name & Phone)
                 </div>
 
                 <div>
                   <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
-                    Instrument Name & Model (e.g. Yamaha F310 Guitar / Keyboard)
+                    Aapka Naam (Full Name) *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Enter instrument details"
-                    value={instrumentName}
-                    onChange={(e) => setInstrumentName(e.target.value)}
+                    placeholder="Ex. Rohan Sharma"
+                    value={contactName}
+                    onChange={(e) => setContactName(e.target.value)}
                     style={{
                       width: '100%',
-                      padding: '0.7rem',
+                      padding: '0.75rem',
                       borderRadius: '8px',
                       background: 'rgba(255,255,255,0.05)',
                       border: '1px solid var(--card-dark-border)',
@@ -184,53 +174,30 @@ const InstrumentServicesSection = () => {
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
-                  <div>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
-                      Your Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Full Name"
-                      value={contactName}
-                      onChange={(e) => setContactName(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '0.7rem',
-                        borderRadius: '8px',
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid var(--card-dark-border)',
-                        color: 'inherit',
-                        boxSizing: 'border-box'
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
-                      Mobile Number *
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="10-digit number"
-                      value={contactPhone}
-                      onChange={(e) => setContactPhone(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '0.7rem',
-                        borderRadius: '8px',
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid var(--card-dark-border)',
-                        color: 'inherit',
-                        boxSizing: 'border-box'
-                      }}
-                    />
-                  </div>
+                <div>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
+                    Mobile / Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="10-digit mobile number"
+                    value={contactPhone}
+                    onChange={(e) => setContactPhone(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      borderRadius: '8px',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid var(--card-dark-border)',
+                      color: 'inherit',
+                      boxSizing: 'border-box'
+                    }}
+                  />
                 </div>
 
                 <button type="submit" className="btn btn-primary" style={{ marginTop: '0.4rem' }}>
-                  Submit Service Estimate Request
+                  Submit Service Request
                 </button>
               </form>
             )}

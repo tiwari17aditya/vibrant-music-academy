@@ -10,7 +10,7 @@ const FlyerModal = ({ onClose, onBookDemoClick }) => {
         className="modal-content"
         onClick={(e) => e.stopPropagation()}
         style={{
-          maxWidth: '900px',
+          maxWidth: '880px',
           width: '95%',
           maxHeight: '90vh',
           overflowY: 'auto',
@@ -26,12 +26,12 @@ const FlyerModal = ({ onClose, onBookDemoClick }) => {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.3rem' }}>
               <span className="badge badge-gold">
-                <Sparkles size={14} /> Official Academy Flyer & Pamphlet
+                <Sparkles size={14} /> Official Pamphlet
               </span>
-              <span className="badge badge-blue">Verified Real-World Details</span>
+              <span className="badge badge-blue">Verified Academy Details</span>
             </div>
             <h2 style={{ fontSize: '1.6rem', margin: 0, fontWeight: 800 }}>
-              {ACADEMY_INFO.name} <span style={{ fontSize: '1.2rem', color: 'var(--primary)', fontWeight: 600 }}>({ACADEMY_INFO.nameHindi})</span>
+              {ACADEMY_INFO.name}
             </h2>
           </div>
           <button
@@ -54,7 +54,7 @@ const FlyerModal = ({ onClose, onBookDemoClick }) => {
         </div>
 
         {/* Content Layout */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))', gap: '2rem', alignItems: 'start' }}>
           
           {/* Left Column: Authentic Image Flyer */}
           <div style={{ textAlign: 'center' }}>
@@ -68,7 +68,7 @@ const FlyerModal = ({ onClose, onBookDemoClick }) => {
               <img
                 src={IMAGE_ASSETS.brochureFlyer}
                 alt="Official Vibrant Music Academy Brochure Flyer"
-                style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '550px', objectFit: 'contain' }}
+                style={{ width: '100%', height: 'auto', display: 'block', maxHeight: '520px', objectFit: 'contain' }}
               />
             </div>
             <p className="theme-text-muted" style={{ fontSize: '0.82rem', marginTop: '0.8rem' }}>
@@ -86,10 +86,10 @@ const FlyerModal = ({ onClose, onBookDemoClick }) => {
               padding: '1.2rem',
               borderRadius: '14px'
             }}>
-              <div style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.3rem' }}>
+              <div style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.3rem' }}>
                 🌟 Exclusive Pamphlet Offer
               </div>
-              <div style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.4rem' }}>
+              <div style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.4rem' }}>
                 "{FLYER_ANNOUNCEMENTS.annualDiscountBanner}"
               </div>
               <div style={{ fontSize: '0.88rem', color: '#10b981', fontWeight: 600 }}>
@@ -102,21 +102,21 @@ const FlyerModal = ({ onClose, onBookDemoClick }) => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <Award size={20} color="#f59e0b" style={{ flexShrink: 0 }} />
                 <div>
-                  <strong>Trinity College London Certification:</strong> Prep for official international music grade exams.
+                  <strong>Trinity College London Certification:</strong> Exam readiness prep.
                 </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <ShoppingBag size={20} color="#3b82f6" style={{ flexShrink: 0 }} />
                 <div>
-                  <strong>One Stop Shop:</strong> Sale, purchase & repair for all musical instruments (Guitars, Keyboards, Drums, etc.).
+                  <strong>One Stop Shop:</strong> Sale, purchase & repair for all musical instruments.
                 </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                 <MapPin size={20} color="#ec4899" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <div>
-                  <strong>Official Studio Address:</strong><br />
+                  <strong>Studio Address:</strong><br />
                   <span className="theme-text-muted">{ACADEMY_INFO.address}</span>
                 </div>
               </div>
@@ -132,7 +132,7 @@ const FlyerModal = ({ onClose, onBookDemoClick }) => {
             {/* Courses Checklist from Flyer */}
             <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '12px', border: '1px solid var(--card-dark-border)' }}>
               <div style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '0.6rem', color: 'var(--primary)' }}>
-                All 10 Programs Featured on Flyer:
+                Pamphlet Ke Saare 10 Programs:
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.85rem' }}>
                 <div><CheckCircle size={13} color="#10b981" /> Acoustic & Electric Guitar</div>
@@ -158,10 +158,10 @@ const FlyerModal = ({ onClose, onBookDemoClick }) => {
                 className="btn btn-primary"
                 style={{ flex: 1 }}
               >
-                <PhoneCall size={18} /> Book Seat for Free Demo
+                <PhoneCall size={18} /> Free Demo Class Book Karein
               </button>
               <a
-                href={`https://wa.me/${ACADEMY_INFO.whatsapp}?text=Hi%20Iyer%20Sir,%20I%20saw%20the%20official%20flyer%20and%20want%20to%20claim%20the%20annual%20discount!`}
+                href={`https://wa.me/${ACADEMY_INFO.whatsapp}?text=Hi%20Iyer%20Sir,%20mujhe%20pamphlet%20annual%20discount%20claim%20karna%20hai!`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-secondary"

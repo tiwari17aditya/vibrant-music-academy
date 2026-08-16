@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, Music, CheckCircle } from 'lucide-react';
 import { ACADEMY_INFO } from '../data/academyData';
+import { saveInquiry } from '../utils/inquiryStorage';
 
 const InstagramIcon = ({ size = 18, color = 'currentColor' }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -10,29 +11,30 @@ const InstagramIcon = ({ size = 18, color = 'currentColor' }) => (
   </svg>
 );
 
-const YoutubeIcon = ({ size = 18, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
-    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
-  </svg>
-);
-
 const ContactFooter = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmitInquiry = (e) => {
     e.preventDefault();
     if (!name || !phone) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      setName('');
-      setPhone('');
-      setMessage('');
-      setSubmitted(false);
-    }, 4000);
+
+    const success = saveInquiry({
+      name,
+      phone,
+      course: 'General Contact Inquiry',
+      source: 'Footer Inquiry Form'
+    });
+
+    if (success) {
+      setSubmitted(true);
+      setTimeout(() => {
+        setName('');
+        setPhone('');
+        setSubmitted(false);
+      }, 4000);
+    }
   };
 
   return (
@@ -61,13 +63,11 @@ const ContactFooter = () => {
               }}>
                 <Music size={22} />
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.4rem' }}>
-                {ACADEMY_INFO.name} <span style={{ fontSize: '1.05rem', color: 'var(--primary)', fontWeight: 600 }}>({ACADEMY_INFO.nameHindi})</span>
-              </h3>
+              <h3 style={{ margin: 0, fontSize: '1.4rem' }}>{ACADEMY_INFO.name}</h3>
             </div>
 
             <p className="theme-text-muted" style={{ fontSize: '0.95rem', marginBottom: '1.8rem', lineHeight: 1.6 }}>
-              {ACADEMY_INFO.tagline}. Step into our studio in Ghansoli or call us for free demo classes and instrument sales & repairs.
+              {ACADEMY_INFO.tagline}. Ghansoli studio aayein ya free demo class book karein!
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.92rem' }}>
@@ -96,7 +96,7 @@ const ContactFooter = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                 <Clock size={20} color="#ec4899" style={{ flexShrink: 0 }} />
                 <div>
-                  <strong>Studio Hours:</strong> <span className="theme-text-muted">Tue - Sun: 9:00 AM - 8:30 PM (Mon Closed)</span>
+                  <strong>Studio Timing:</strong> <span className="theme-text-muted">Tue - Sun: 9:00 AM - 8:30 PM (Mon Closed)</span>
                 </div>
               </div>
             </div>
@@ -104,44 +104,47 @@ const ContactFooter = () => {
             {/* Direct WhatsApp CTA */}
             <div style={{ marginTop: '2rem' }}>
               <a
-                href={`https://wa.me/${ACADEMY_INFO.whatsapp}?text=Hi%20Iyer%20Sir!%20I%20want%20to%20know%20more%20about%20music%20classes%20at%20Vibrant%20Academy.`}
+                href={`https://wa.me/${ACADEMY_INFO.whatsapp}?text=Hi%20Iyer%20Sir!%20Mujhe%20Vibrant%20Academy%20ke%20courses%20ke%20baare%20mein%20jaanna%20hai.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-primary"
                 style={{ background: '#25D366', color: '#ffffff', width: '100%', boxSizing: 'border-box' }}
               >
-                <Send size={18} /> Chat Directly on WhatsApp
+                <Send size={18} /> WhatsApp Par Direct Chat Karein
               </a>
             </div>
           </div>
 
-          {/* Column 2: Inquiry Form */}
+          {/* Column 2: Inquiry Form (Name & Phone Only) */}
           <div className="theme-card" style={{ padding: '2rem', borderRadius: 'var(--radius-lg)' }}>
-            <h3 style={{ fontSize: '1.4rem', marginBottom: '1.2rem' }}>Send a Quick Inquiry</h3>
+            <h3 style={{ fontSize: '1.4rem', marginBottom: '0.5rem' }}>Quick Callback Inquiry</h3>
+            <p className="theme-text-muted" style={{ fontSize: '0.88rem', marginBottom: '1.5rem' }}>
+              Apna Naam aur Mobile Number dein, Iyer Sir aapko call karenge.
+            </p>
 
             {submitted ? (
               <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
                 <CheckCircle size={48} color="#10b981" style={{ marginBottom: '1rem' }} />
                 <h4 style={{ fontSize: '1.2rem', marginBottom: '0.4rem' }}>Thank You!</h4>
                 <p className="theme-text-muted" style={{ fontSize: '0.9rem' }}>
-                  Iyer Sir will contact you shortly to schedule your demo class.
+                  Iyer Sir aapko demo class schedule karne ke liye jaldi hi call karenge.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmitInquiry} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <form onSubmit={handleSubmitInquiry} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                 <div>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
-                    Your Name *
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>
+                    Aapka Naam (Full Name) *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Enter your full name"
+                    placeholder="Ex. Rahul Verma"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     style={{
                       width: '100%',
-                      padding: '0.7rem',
+                      padding: '0.75rem',
                       borderRadius: '8px',
                       background: 'rgba(255,255,255,0.05)',
                       border: '1px solid var(--card-dark-border)',
@@ -152,8 +155,8 @@ const ContactFooter = () => {
                 </div>
 
                 <div>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
-                    Phone / Mobile *
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>
+                    Mobile / Phone Number *
                   </label>
                   <input
                     type="tel"
@@ -163,7 +166,7 @@ const ContactFooter = () => {
                     onChange={(e) => setPhone(e.target.value)}
                     style={{
                       width: '100%',
-                      padding: '0.7rem',
+                      padding: '0.75rem',
                       borderRadius: '8px',
                       background: 'rgba(255,255,255,0.05)',
                       border: '1px solid var(--card-dark-border)',
@@ -173,30 +176,8 @@ const ContactFooter = () => {
                   />
                 </div>
 
-                <div>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
-                    Which instrument do you want to learn?
-                  </label>
-                  <textarea
-                    rows="3"
-                    placeholder="e.g. Guitar basics, Trinity exam prep, Keyboard..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.7rem',
-                      borderRadius: '8px',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid var(--card-dark-border)',
-                      color: 'inherit',
-                      boxSizing: 'border-box',
-                      resize: 'none'
-                    }}
-                  />
-                </div>
-
                 <button type="submit" className="btn btn-primary" style={{ marginTop: '0.5rem' }}>
-                  Submit Inquiry
+                  Callback Form Submit Karein
                 </button>
               </form>
             )}
@@ -222,9 +203,6 @@ const ContactFooter = () => {
           <div style={{ display: 'flex', gap: '1.5rem' }}>
             <a href={`https://instagram.com/${ACADEMY_INFO.instagram}`} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
               <InstagramIcon size={18} />
-            </a>
-            <a href={`https://youtube.com/${ACADEMY_INFO.youtube}`} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
-              <YoutubeIcon size={18} />
             </a>
           </div>
           <div>

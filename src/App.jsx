@@ -9,21 +9,19 @@ import SocialHub from './components/SocialHub';
 import InteractiveTools from './components/InteractiveTools';
 import TestimonialsSection from './components/TestimonialsSection';
 import EnrollmentModal from './components/EnrollmentModal';
-import PaymentModal from './components/PaymentModal';
 import AdminPortal from './components/AdminPortal';
 import QuickApproachWidget from './components/QuickApproachWidget';
 import ContactFooter from './components/ContactFooter';
 import FlyerModal from './components/FlyerModal';
-import { COURSES_DATA } from './data/academyData';
+import { COURSES_DATA, FLYER_ANNOUNCEMENTS } from './data/academyData';
+import { Sparkles } from 'lucide-react';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isEnrollmentOpen, setIsEnrollmentOpen] = useState(false);
-  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [isAdminPortalOpen, setIsAdminPortalOpen] = useState(false);
   const [isFlyerModalOpen, setIsFlyerModalOpen] = useState(false);
   const [selectedCourseForModal, setSelectedCourseForModal] = useState(null);
-  const [activeEnrollmentData, setActiveEnrollmentData] = useState(null);
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
@@ -37,17 +35,44 @@ function App() {
     setIsEnrollmentOpen(true);
   };
 
-  const handleProceedToPayment = (enrollmentData) => {
-    setActiveEnrollmentData(enrollmentData);
-    setIsEnrollmentOpen(false);
-    setIsPaymentOpen(true);
-  };
-
   return (
     <div className={`app-wrapper ${isDarkMode ? 'dark-theme' : 'light-mode'}`}>
       <ErrorBoundary>
         
-        {/* Header */}
+        {/* Top Announcement Ribbon - Rendered above sticky header to prevent layout distortion */}
+        <div style={{
+          background: 'linear-gradient(90deg, #f59e0b 0%, #d97706 50%, #3b82f6 100%)',
+          color: '#0f1015',
+          fontSize: '0.8rem',
+          fontWeight: 700,
+          textAlign: 'center',
+          padding: '0.35rem 1rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.6rem',
+          zIndex: 901
+        }}>
+          <span><Sparkles size={13} inline style={{ verticalAlign: 'middle' }} /> "{FLYER_ANNOUNCEMENTS.annualDiscountBanner}"</span>
+          <button
+            onClick={() => setIsFlyerModalOpen(true)}
+            style={{
+              background: '#0f1015',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '10px',
+              padding: '0.15rem 0.55rem',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            Pamphlet Dekhein &rarr;
+          </button>
+        </div>
+
+        {/* Sticky Clean Header */}
         <Header
           isDarkMode={isDarkMode}
           setIsDarkMode={setIsDarkMode}
@@ -83,12 +108,12 @@ function App() {
             <InstrumentServicesSection />
           </ErrorBoundary>
 
-          {/* Live Social Media Hub */}
+          {/* Live Modular Social Media Hub */}
           <ErrorBoundary>
             <SocialHub />
           </ErrorBoundary>
 
-          {/* Interactive Music Toolkit (Metronome, Guitar Tuner, Piano Keys, Chord Synth, Quiz) */}
+          {/* Interactive Music Toolkit */}
           <ErrorBoundary>
             <InteractiveTools />
           </ErrorBoundary>
@@ -120,20 +145,11 @@ function App() {
           />
         )}
 
-        {/* Enrollment Modal */}
+        {/* Direct Seat Booking / Free Demo Enrollment Modal (Name + Phone Only, No Payment) */}
         {isEnrollmentOpen && (
           <EnrollmentModal
             preSelectedCourse={selectedCourseForModal}
             onClose={() => setIsEnrollmentOpen(false)}
-            onProceedToPayment={handleProceedToPayment}
-          />
-        )}
-
-        {/* Payment Modal */}
-        {isPaymentOpen && activeEnrollmentData && (
-          <PaymentModal
-            enrollmentData={activeEnrollmentData}
-            onClose={() => setIsPaymentOpen(false)}
           />
         )}
 

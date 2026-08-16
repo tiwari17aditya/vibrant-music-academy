@@ -37,13 +37,13 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
         {/* Section Header */}
         <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 3rem auto' }}>
           <span className="badge badge-gold" style={{ marginBottom: '0.8rem' }}>
-            <Sparkles size={14} /> Official Brochure Offerings
+            <Sparkles size={14} /> Official Academy Courses
           </span>
           <h2 className="heading-serif" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            All 10 Instrument, Vocal & <span className="gradient-text">Dance Programs</span>
+            Saare 10 Instrument, Vocal & <span className="gradient-text">Dance Programs</span>
           </h2>
           <p className="theme-text-muted">
-            From Acoustic/Electric Guitar and Drums to Classical Tabla, Violin, Vocals & Kathak/Bharatnatyam. Structured step-by-step guidance for ages 6 to 65.
+            Guitar aur Drums se lekar Tabla, Flute, Ukulele, Violin aur Kathak/Bharatnatyam tak! Ages 6 se 65 tak sabhi ke liye step-by-step classes.
           </p>
         </div>
 
@@ -52,17 +52,17 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
           display: 'flex',
           justifyContent: 'center',
           flexWrap: 'wrap',
-          gap: '0.6rem',
-          marginBottom: '3rem'
+          gap: '0.5rem',
+          marginBottom: '2.5rem'
         }}>
           {categories.map((cat, idx) => (
             <button
               key={idx}
               onClick={() => setActiveTab(cat)}
               style={{
-                padding: '0.6rem 1.4rem',
+                padding: '0.5rem 1.2rem',
                 borderRadius: 'var(--radius-full)',
-                fontSize: '0.92rem',
+                fontSize: '0.88rem',
                 fontWeight: 600,
                 cursor: 'pointer',
                 border: activeTab === cat ? '1px solid var(--primary)' : '1px solid var(--card-dark-border)',
@@ -110,7 +110,7 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em'
                 }}>
-                  Popular
+                  Popular Batch
                 </div>
               )}
 
@@ -132,7 +132,7 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
                 </div>
 
                 <h3 style={{ fontSize: '1.35rem', marginBottom: '0.8rem' }}>{course.title}</h3>
-                <p className="theme-text-muted" style={{ fontSize: '0.92rem', marginBottom: '1.5rem' }}>
+                <p className="theme-text-muted" style={{ fontSize: '0.92rem', marginBottom: '1.5rem', lineHeight: 1.55 }}>
                   {course.description}
                 </p>
 
@@ -150,7 +150,7 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
                 {/* Syllabus Checklist preview */}
                 <div style={{ marginBottom: '2rem' }}>
                   <div style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.6rem', color: 'var(--text-dark-muted)' }}>
-                    Key Syllabus Highlights:
+                    Syllabus ke Highlights:
                   </div>
                   {course.syllabus.slice(0, 3).map((item, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.88rem', marginBottom: '0.4rem' }}>
@@ -170,7 +170,7 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
                   borderTop: '1px solid var(--card-dark-border)'
                 }}>
                   <div>
-                    <span style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--primary)' }}>{course.fee}</span>
+                    <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--primary)' }}>{course.fee}</span>
                   </div>
                   <button
                     onClick={() => setSelectedCourseDetail(course)}
@@ -185,7 +185,7 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
                   className="btn btn-primary"
                   style={{ width: '100%' }}
                 >
-                  Enroll Now
+                  Free Demo Seat Book Karein
                 </button>
               </div>
 
@@ -220,7 +220,7 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
               marginBottom: '1.5rem'
             }}>
               <div style={{ fontWeight: 700, marginBottom: '0.8rem', color: 'var(--primary)' }}>
-                Complete Module Syllabus:
+                Pura Detailed Syllabus:
               </div>
               <ul style={{ paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {selectedCourseDetail.syllabus.map((point, idx) => (
@@ -241,7 +241,7 @@ const CoursesSection = ({ onSelectCourseToEnroll }) => {
                 }}
                 className="btn btn-primary"
               >
-                Proceed to Register ({selectedCourseDetail.fee})
+                Demo Class Book Karein ({selectedCourseDetail.fee})
               </button>
             </div>
 

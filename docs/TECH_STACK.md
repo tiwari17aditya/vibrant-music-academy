@@ -8,18 +8,21 @@ This document tracks all technology components, open-source libraries, audio API
 - **Language**: JavaScript (ESNext, JSX)
 - **Styling**: Pure CSS3 with CSS Custom Properties, Flexbox/Grid, Glassmorphic backdrop-filters, and Responsive Media Queries.
 
-## 2. Admin Security & Zero-Cache Mechanisms
-- **In-Memory & Session Security**: Admin PIN (`1234` default) is authenticated in-memory and temporary `sessionStorage` only. **Zero persistent disk caching of raw PINs** to prevent credential leakage.
+## 2. Admin Security & Inquiry Database System
+- **Inquiry Persistence (`src/utils/inquiryStorage.js`)**: Client-side database storage persisting student callback inquiries (Name + Phone + Timestamp + Source).
+- **Admin PIN Security**: Admin PIN (`1234` default) is authenticated in-memory and temporary `sessionStorage` only. **Zero persistent disk caching of raw PINs** to prevent credential leakage.
 - **Changeable Security PIN**: Iyer Sir can change the Admin PIN dynamically during any active session.
-- **Admin Dashboard**: Real-time view of student registrations, fee payment receipts (`VMA-2026-XXXX`), callback inquiries, and CSV export capabilities.
+- **Admin Dashboard (`AdminPortal.jsx`)**: Real-time view of student callback inquiries (`Name + Phone`), search/filter, and 1-click **CSV export** capabilities.
+- **Fraud Prevention**: Online payment modals, UPI QR codes, VPAs, and credit card inputs removed completely to protect users from fraud concerns.
 
-## 3. Open Source UI Components, Authentic Flyer & Quick Approach
+## 3. Open Source UI Components, Hinglish Content & Modular Socials
 - **Icons**: `lucide-react` (Free, MIT licensed vector icon set)
 - **Typography**: Google Fonts (`Outfit` for sans-serif UI, `Playfair Display` for musical headings)
+- **Hinglish System**: All UI titles, course descriptions, bios, and CTAs written in natural **Hinglish** (Latin script).
 - **Official Brochure Modal (`FlyerModal.jsx`)**: High-resolution viewer displaying original pamphlet image (`/vibrant-details.jpg`).
 - **One-Stop Shop Services (`InstrumentServicesSection.jsx`)**: Instrument sales, pre-owned gear trade-in, and repair servicing.
-- **Quick Approach Speed Dial**: Floating bottom-right widget providing 1-click access to WhatsApp Chat (`9065338366`), Direct Phone Call (`9065338366`), Free Demo Booking, and Ghansoli Studio Location (`Shop No 1, Plot No-14 Shelter house, Sector 5`).
-- **Social Integration**: Instagram handle `_vibrantbeats_` and YouTube lessons.
+- **Quick Approach Speed Dial**: Floating bottom-right widget providing 1-click access to WhatsApp Chat (`9065338366`), Direct Phone Call (`9065338366`), Free Demo Booking, and Ghansoli Studio Location.
+- **Modular Social Architecture**: Extensible `MODULAR_SOCIAL_PLATFORMS` schema for Instagram (`_vibrantbeats_`) and future platform additions.
 
 ## 4. Audio & Music Engine (100% Free & Native)
 - **Native Browser Web Audio API**:

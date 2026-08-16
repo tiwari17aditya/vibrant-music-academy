@@ -1,351 +1,323 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Key, X, Download, Trash2, CheckCircle2, User, Phone, Calendar, ShieldAlert, RefreshCw, Eye } from 'lucide-react';
-import { ACADEMY_INFO } from '../data/academyData';
-
-const DEFAULT_PIN = "1234";
+import { X, Lock, KeyRound, Download, Trash2, PhoneCall, RefreshCw, CheckCircle, Database } from 'lucide-react';
+import { getInquiries, deleteInquiry, clearInquiries, subscribeInquiries } from '../utils/inquiryStorage';
 
 const AdminPortal = ({ onClose }) => {
   const [pinInput, setPinInput] = useState('');
+  const [adminPin, setAdminPin] = useState('1234');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [pinError, setPinError] = useState('');
-  
-  // Custom PIN stored only in session state (No disk cache for security)
-  const [currentPin, setCurrentPin] = useState(() => {
-    return sessionStorage.getItem('admin_pin_temp') || DEFAULT_PIN;
-  });
-
+  const [errorMsg, setErrorMsg] = useState('');
+  const [inquiries, setInquiries] = useState([]);
   const [isChangingPin, setIsChangingPin] = useState(false);
   const [newPin, setNewPin] = useState('');
-  const [confirmNewPin, setConfirmNewPin] = useState('');
-  const [pinSuccessMsg, setPinSuccessMsg] = useState('');
+  const [pinChangedMsg, setPinChangedMsg] = useState(false);
 
-  // Data states
-  const [enrollments, setEnrollments] = useState([]);
-  const [inquiries, setInquiries] = useState([]);
-  const [selectedTab, setSelectedTab] = useState('enrollments'); // 'enrollments' | 'inquiries'
-
-  // Load data from client storage (or seed test data)
-  const loadAdminData = () => {
-    try {
-      const storedEnrollments = JSON.parse(localStorage.getItem('vibrant_enrollments') || '[]');
-      const storedInquiries = JSON.parse(localStorage.getItem('vibrant_inquiries') || '[]');
-
-      // If empty, provide rich sample test data for Iyer Sir to preview!
-      if (storedEnrollments.length === 0) {
-        const sampleEnrollments = [
-          {
-            receiptId: "VMA-2026-8912",
-            name: "Aditya Tiwari",
-            phone: "9820012345",
-            email: "aditya.tiwari@example.com",
-            course: { title: "Guitar Foundations & Intermediate Mastery", fee: "₹4,500 / month" },
-            batch: "Weekend Morning (Sat-Sun 10 AM)",
-            learningMode: "Offline Studio Class (Ghansoli, Navi Mumbai, 400701)",
-            amount: 4500,
-            date: new Date().toLocaleDateString('en-IN'),
-            status: "Enrolled"
-          },
-          {
-            receiptId: "VMA-2026-7431",
-            name: "Sneha Kulkarni",
-            phone: "9819123456",
-            email: "sneha.k@example.com",
-            course: { title: "Trinity College London Exam Preparation", fee: "₹6,000 / month" },
-            batch: "Weekday Evening (Tue-Thu 6 PM)",
-            learningMode: "Offline Studio Class (Ghansoli, Navi Mumbai, 400701)",
-            amount: 6000,
-            date: new Date().toLocaleDateString('en-IN'),
-            status: "Pending Audition"
-          }
-        ];
-        localStorage.setItem('vibrant_enrollments', JSON.stringify(sampleEnrollments));
-        setEnrollments(sampleEnrollments);
-      } else {
-        setEnrollments(storedEnrollments);
-      }
-
-      if (storedInquiries.length === 0) {
-        const sampleInquiries = [
-          {
-            id: 1,
-            name: "Rajesh Varma",
-            phone: "9876543210",
-            message: "Interested in weekend keyboard classes for my 8-year-old daughter.",
-            date: new Date().toLocaleDateString('en-IN'),
-            status: "New Inquiry"
-          }
-        ];
-        localStorage.setItem('vibrant_inquiries', JSON.stringify(sampleInquiries));
-        setInquiries(sampleInquiries);
-      } else {
-        setInquiries(storedInquiries);
-      }
-    } catch (err) {
-      console.error("Failed to load admin data:", err);
-    }
-  };
+  useEffect(() => {
+    setInquiries(getInquiries());
+    const unsubscribe = subscribeInquiries((updated) => {
+      setInquiries(updated);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setPinError('');
-    if (pinInput === currentPin) {
+    if (pinInput === adminPin) {
       setIsAuthenticated(true);
-      loadAdminData();
+      setErrorMsg('');
     } else {
-      setPinError("Incorrect Security PIN. Please try again.");
+      setErrorMsg('Incorrect PIN! Default PIN: 1234');
     }
   };
 
   const handleChangePin = (e) => {
     e.preventDefault();
-    if (newPin.length < 4) {
-      setPinError("PIN must be at least 4 digits.");
-      return;
-    }
-    if (newPin !== confirmNewPin) {
-      setPinError("New PINs do not match.");
-      return;
-    }
-    setCurrentPin(newPin);
-    sessionStorage.setItem('admin_pin_temp', newPin);
-    setIsChangingPin(false);
-    setNewPin('');
-    setConfirmNewPin('');
-    setPinSuccessMsg("Admin PIN updated successfully for this session!");
-    setTimeout(() => setPinSuccessMsg(''), 4000);
-  };
-
-  const handleClearData = (type) => {
-    if (window.confirm(`Are you sure you want to clear all ${type}?`)) {
-      if (type === 'enrollments') {
-        localStorage.removeItem('vibrant_enrollments');
-        setEnrollments([]);
-      } else {
-        localStorage.removeItem('vibrant_inquiries');
-        setInquiries([]);
-      }
+    if (newPin.length >= 4) {
+      setAdminPin(newPin);
+      setIsChangingPin(false);
+      setNewPin('');
+      setPinChangedMsg(true);
+      setTimeout(() => setPinChangedMsg(false), 3000);
     }
   };
 
-  const exportToCSV = (data, filename) => {
-    if (data.length === 0) return;
-    const headers = Object.keys(data[0]).join(',');
-    const rows = data.map(obj => Object.values(obj).map(v => `"${typeof v === 'object' ? v.title || JSON.stringify(v) : v}"`).join(','));
-    const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].join('\n');
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `${filename}_${new Date().toISOString().slice(0,10)}.csv`);
+  const handleExportCSV = () => {
+    if (inquiries.length === 0) return;
+    const headers = ['ID', 'Name', 'Phone', 'Course/Interest', 'Source', 'Timestamp'];
+    const rows = inquiries.map(inq => [
+      inq.id,
+      `"${inq.name}"`,
+      `"${inq.phone}"`,
+      `"${inq.course}"`,
+      `"${inq.source}"`,
+      `"${inq.timestamp}"`
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `VMA_Student_Inquiries_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" style={{ maxWidth: '850px', width: '95%' }} onClick={(e) => e.stopPropagation()}>
-        
-        {/* Header */}
+    <div className="modal-overlay" onClick={onClose} style={{ zIndex: 1200 }}>
+      <div
+        className="modal-content"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          maxWidth: '850px',
+          width: '95%',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          padding: '2rem',
+          borderRadius: 'var(--radius-lg)',
+          background: 'var(--bg-dark-card)',
+          border: '1px solid var(--primary)',
+          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7)'
+        }}
+      >
+        {/* Header Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--card-dark-border)', paddingBottom: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <div style={{ padding: '0.5rem', borderRadius: '10px', background: 'rgba(245,158,11,0.2)', color: 'var(--primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+            <div style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '10px',
+              background: 'rgba(245, 158, 11, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--primary)'
+            }}>
               <Lock size={22} />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.4rem' }}>Iyer Sir's Admin Portal</h3>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-dark-muted)' }}>Secured Dashboard | Vibrant Music Academy</span>
+              <h3 style={{ margin: 0, fontSize: '1.4rem' }}>Iyer Sir Admin Portal</h3>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-dark-muted)' }}>
+                Student Callbacks & Inquiry Database Desk
+              </div>
             </div>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>
-            <X size={24} />
+          <button
+            onClick={onClose}
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              border: 'none',
+              color: 'inherit',
+              cursor: 'pointer',
+              borderRadius: '50%',
+              width: '36px',
+              height: '36px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <X size={20} />
           </button>
         </div>
 
-        {/* Auth Screen */}
         {!isAuthenticated ? (
+          /* PIN Authentication Screen */
           <div style={{ maxWidth: '400px', margin: '2rem auto', textAlign: 'center' }}>
-            <Key size={48} color="var(--primary)" style={{ marginBottom: '1rem' }} />
-            <h4 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>Enter Admin Security PIN</h4>
-            <p className="theme-text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-              Default PIN is <strong style={{ color: 'var(--primary)' }}>1234</strong>. (No disk cache for maximum security).
+            <div style={{
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+              background: 'rgba(59, 130, 246, 0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem auto'
+            }}>
+              <KeyRound size={32} color="#3b82f6" />
+            </div>
+
+            <h4 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Admin PIN Enter Karein</h4>
+            <p className="theme-text-muted" style={{ fontSize: '0.88rem', marginBottom: '1.5rem' }}>
+              Only for Iyer Sir. Default Security PIN is <strong>1234</strong>
             </p>
 
-            {pinError && (
-              <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239,68,68,0.4)', color: '#ef4444', padding: '0.75rem', borderRadius: '10px', fontSize: '0.88rem', marginBottom: '1.2rem' }}>
-                {pinError}
-              </div>
-            )}
-
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <input
                 type="password"
-                maxLength="8"
-                placeholder="Enter 4-digit PIN"
+                maxLength={6}
+                placeholder="Enter Admin PIN (Default: 1234)"
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 style={{
-                  width: '100%',
                   padding: '0.8rem',
-                  fontSize: '1.4rem',
-                  letterSpacing: '0.4em',
+                  fontSize: '1.2rem',
                   textAlign: 'center',
-                  borderRadius: '12px',
+                  letterSpacing: '0.3em',
+                  borderRadius: '10px',
                   background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid var(--primary)',
-                  color: 'inherit',
-                  marginBottom: '1.2rem',
-                  boxSizing: 'border-box'
+                  border: '1px solid var(--card-dark-border)',
+                  color: 'inherit'
                 }}
               />
-              <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
-                Unlock Dashboard
+
+              {errorMsg && (
+                <div style={{ color: '#ef4444', fontSize: '0.85rem', fontWeight: 600 }}>
+                  {errorMsg}
+                </div>
+              )}
+
+              <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
+                Unlock Portal
               </button>
             </form>
           </div>
         ) : (
-          /* Authenticated Dashboard */
+          /* Authenticated Admin Dashboard */
           <div>
-            {pinSuccessMsg && (
-              <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16,185,129,0.4)', color: '#10b981', padding: '0.75rem', borderRadius: '10px', fontSize: '0.88rem', marginBottom: '1rem' }}>
-                {pinSuccessMsg}
-              </div>
-            )}
-
-            {/* Admin Controls Top Bar */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', gap: '0.6rem' }}>
-                <button
-                  onClick={() => setSelectedTab('enrollments')}
-                  className={`btn btn-sm ${selectedTab === 'enrollments' ? 'btn-primary' : 'btn-secondary'}`}
-                >
-                  Registrations & Payments ({enrollments.length})
-                </button>
-                <button
-                  onClick={() => setSelectedTab('inquiries')}
-                  className={`btn btn-sm ${selectedTab === 'inquiries' ? 'btn-primary' : 'btn-secondary'}`}
-                >
-                  Online Inquiries ({inquiries.length})
-                </button>
+            {/* Action Bar */}
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1rem',
+              marginBottom: '1.5rem',
+              background: 'rgba(255,255,255,0.03)',
+              padding: '1rem',
+              borderRadius: '12px',
+              border: '1px solid var(--card-dark-border)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <Database size={20} color="var(--primary)" />
+                <span style={{ fontWeight: 700, fontSize: '1.05rem' }}>
+                  Total Inquiries Saved: <span style={{ color: 'var(--primary)' }}>{inquiries.length}</span>
+                </span>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.6rem' }}>
-                <button onClick={() => setIsChangingPin(!isChangingPin)} className="btn btn-secondary btn-sm">
-                  <Key size={14} /> Change PIN
+              <div style={{ display: 'flex', gap: '0.8rem' }}>
+                <button
+                  onClick={handleExportCSV}
+                  className="btn btn-secondary btn-sm"
+                  disabled={inquiries.length === 0}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                >
+                  <Download size={16} /> Export CSV
                 </button>
-                <button onClick={loadAdminData} className="btn btn-secondary btn-sm">
-                  <RefreshCw size={14} /> Refresh Data
+                <button
+                  onClick={() => setIsChangingPin(!isChangingPin)}
+                  className="btn btn-secondary btn-sm"
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                >
+                  <KeyRound size={16} /> Change PIN
                 </button>
               </div>
             </div>
 
-            {/* PIN Change Drawer */}
-            {isChangingPin && (
-              <form onSubmit={handleChangePin} style={{ background: 'rgba(255,255,255,0.04)', padding: '1.2rem', borderRadius: '12px', marginBottom: '1.5rem', border: '1px solid var(--primary)' }}>
-                <h4 style={{ margin: '0 0 0.8rem 0', fontSize: '1rem' }}>Change Admin Security PIN</h4>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                  <input
-                    type="password"
-                    placeholder="New 4-digit PIN"
-                    value={newPin}
-                    onChange={(e) => setNewPin(e.target.value)}
-                    style={{ padding: '0.6rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--card-dark-border)', color: 'inherit' }}
-                  />
-                  <input
-                    type="password"
-                    placeholder="Confirm New PIN"
-                    value={confirmNewPin}
-                    onChange={(e) => setConfirmNewPin(e.target.value)}
-                    style={{ padding: '0.6rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--card-dark-border)', color: 'inherit' }}
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary btn-sm">Save New PIN</button>
-              </form>
-            )}
-
-            {/* Enrollments View */}
-            {selectedTab === 'enrollments' && (
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                  <h4 style={{ margin: 0 }}>Student Registrations & Fee Receipts</h4>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => exportToCSV(enrollments, 'vibrant_enrollments')} className="btn btn-secondary btn-sm">
-                      <Download size={14} /> Export CSV
-                    </button>
-                    <button onClick={() => handleClearData('enrollments')} className="btn btn-secondary btn-sm" style={{ color: '#ef4444' }}>
-                      <Trash2 size={14} /> Clear All
-                    </button>
-                  </div>
-                </div>
-
-                {enrollments.length === 0 ? (
-                  <p className="theme-text-muted" style={{ textStyle: 'italic', padding: '2rem 0', textAlign: 'center' }}>
-                    No student registrations recorded yet.
-                  </p>
-                ) : (
-                  <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', textAlign: 'left' }}>
-                      <thead>
-                        <tr style={{ background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid var(--card-dark-border)' }}>
-                          <th style={{ padding: '0.75rem' }}>Receipt ID</th>
-                          <th style={{ padding: '0.75rem' }}>Student Name</th>
-                          <th style={{ padding: '0.75rem' }}>Mobile</th>
-                          <th style={{ padding: '0.75rem' }}>Course</th>
-                          <th style={{ padding: '0.75rem' }}>Amount</th>
-                          <th style={{ padding: '0.75rem' }}>Batch & Mode</th>
-                          <th style={{ padding: '0.75rem' }}>Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {enrollments.map((item, idx) => (
-                          <tr key={idx} style={{ borderBottom: '1px solid var(--card-dark-border)' }}>
-                            <td style={{ padding: '0.75rem', fontWeight: 700, color: 'var(--primary)' }}>{item.receiptId}</td>
-                            <td style={{ padding: '0.75rem', fontWeight: 600 }}>{item.name}</td>
-                            <td style={{ padding: '0.75rem' }}>{item.phone}</td>
-                            <td style={{ padding: '0.75rem' }}>{item.course?.title || item.course}</td>
-                            <td style={{ padding: '0.75rem', fontWeight: 700, color: '#10b981' }}>₹{item.amount}</td>
-                            <td style={{ padding: '0.75rem', fontSize: '0.8rem', color: '#9ca3af' }}>{item.batch}</td>
-                            <td style={{ padding: '0.75rem', fontSize: '0.8rem' }}>{item.date}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+            {pinChangedMsg && (
+              <div style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <CheckCircle size={18} /> Admin Security PIN successfully updated for this session!
               </div>
             )}
 
-            {/* Inquiries View */}
-            {selectedTab === 'inquiries' && (
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                  <h4 style={{ margin: 0 }}>Online Student Callback Inquiries</h4>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => exportToCSV(inquiries, 'vibrant_inquiries')} className="btn btn-secondary btn-sm">
-                      <Download size={14} /> Export CSV
-                    </button>
-                    <button onClick={() => handleClearData('inquiries')} className="btn btn-secondary btn-sm" style={{ color: '#ef4444' }}>
-                      <Trash2 size={14} /> Clear All
-                    </button>
-                  </div>
-                </div>
+            {isChangingPin && (
+              <form onSubmit={handleChangePin} style={{ display: 'flex', gap: '0.8rem', marginBottom: '1.5rem', background: 'rgba(245, 158, 11, 0.1)', padding: '1rem', borderRadius: '10px' }}>
+                <input
+                  type="password"
+                  placeholder="New 4-digit PIN"
+                  value={newPin}
+                  onChange={(e) => setNewPin(e.target.value)}
+                  style={{
+                    padding: '0.6rem',
+                    borderRadius: '8px',
+                    background: 'rgba(255,255,255,0.08)',
+                    border: '1px solid var(--card-dark-border)',
+                    color: 'inherit',
+                    flex: 1
+                  }}
+                />
+                <button type="submit" className="btn btn-primary btn-sm">Update PIN</button>
+              </form>
+            )}
 
-                {inquiries.length === 0 ? (
-                  <p className="theme-text-muted" style={{ fontStyle: 'italic', padding: '2rem 0', textAlign: 'center' }}>
-                    No inquiries received yet.
-                  </p>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    {inquiries.map((inq, idx) => (
-                      <div key={idx} style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--card-dark-border)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-                          <strong style={{ color: 'var(--primary)' }}>{inq.name} ({inq.phone})</strong>
-                          <span style={{ fontSize: '0.78rem', color: '#9ca3af' }}>{inq.date}</span>
-                        </div>
-                        <p style={{ margin: 0, fontSize: '0.9rem', color: '#d1d5db' }}>{inq.message || "No specific message provided."}</p>
-                      </div>
+            {/* Inquiries Data Table */}
+            {inquiries.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-dark-muted)' }}>
+                No student inquiries stored yet.
+              </div>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid var(--card-dark-border)', color: 'var(--primary)' }}>
+                      <th style={{ padding: '0.75rem' }}>Student Name</th>
+                      <th style={{ padding: '0.75rem' }}>Phone Number</th>
+                      <th style={{ padding: '0.75rem' }}>Course / Interest</th>
+                      <th style={{ padding: '0.75rem' }}>Source</th>
+                      <th style={{ padding: '0.75rem' }}>Date & Time</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'center' }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {inquiries.map((inq) => (
+                      <tr key={inq.id} style={{ borderBottom: '1px solid var(--card-dark-border)' }}>
+                        <td style={{ padding: '0.85rem', fontWeight: 700 }}>{inq.name}</td>
+                        <td style={{ padding: '0.85rem' }}>
+                          <a
+                            href={`tel:${inq.phone}`}
+                            style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}
+                          >
+                            <PhoneCall size={14} /> {inq.phone}
+                          </a>
+                        </td>
+                        <td style={{ padding: '0.85rem' }}>
+                          <span className="badge badge-blue">{inq.course}</span>
+                        </td>
+                        <td style={{ padding: '0.85rem', color: 'var(--text-dark-muted)', fontSize: '0.82rem' }}>
+                          {inq.source}
+                        </td>
+                        <td style={{ padding: '0.85rem', color: 'var(--text-dark-muted)', fontSize: '0.82rem' }}>
+                          {new Date(inq.timestamp).toLocaleString()}
+                        </td>
+                        <td style={{ padding: '0.85rem', textAlign: 'center' }}>
+                          <button
+                            onClick={() => deleteInquiry(inq.id)}
+                            title="Delete Entry"
+                            style={{
+                              background: 'rgba(239, 68, 68, 0.15)',
+                              border: 'none',
+                              color: '#ef4444',
+                              padding: '0.4rem',
+                              borderRadius: '6px',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
                     ))}
-                  </div>
-                )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {inquiries.length > 0 && (
+              <div style={{ textAlign: 'right', marginTop: '1.5rem' }}>
+                <button
+                  onClick={clearInquiries}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#ef4444',
+                    cursor: 'pointer',
+                    fontSize: '0.82rem',
+                    textDecoration: 'underline'
+                  }}
+                >
+                  Clear All Inquiries
+                </button>
               </div>
             )}
 

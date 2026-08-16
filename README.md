@@ -14,15 +14,17 @@ This project also serves as a flagship portfolio piece demonstrating modern fron
 
 ---
 
-## ✨ Key Features (v1.1.0 Updates)
+## ✨ Key Features (v1.2.0 Hinglish & Database Edition)
 
+- 🗣️ **Pure Hinglish Interface**: All titles, course information, bio, and call-to-actions written in friendly, accessible **Hinglish** (Latin script).
+- 🎨 **Fixed Uncluttered Header**: Clean, non-distorted navigation bar with top announcement ribbon separated above the sticky header container.
+- 🗄️ **Database Inquiry System (`inquiryStorage.js`)**: Client-side database storage persisting all student callback inquiries (Name + Phone only).
+- 🛡️ **Fraud Prevention (No Online Payment / No QR Codes)**: Online payment modals, credit card forms, and UPI QR codes completely removed to protect users from fraud concerns.
+- 📱 **Modular Social Media System**: Modular social array architecture currently displaying Instagram (`_vibrantbeats_`), ready for effortless addition of new platforms.
 - 📸 **Authentic Brochure Flyer Viewer (`FlyerModal.jsx`)**: High-resolution viewer displaying the original academy pamphlet photo (`/vibrant-details.jpg`).
-- 🏬 **One-Stop Shop: Instrument Sales & Repairs (`InstrumentServicesSection.jsx`)**: Comprehensive desk for new & certified pre-owned instrument sales, trade-in, and professional repair servicing (re-stringing, neck setup, action tuning, drum tuning).
+- 🏬 **One-Stop Shop: Instrument Sales & Repairs (`InstrumentServicesSection.jsx`)**: Desk for new & certified pre-owned instrument sales, trade-in, and professional repair servicing.
 - 🎶 **Complete 10-Course Catalog**: Filterable curriculum covering Acoustic & Electric Guitar, Drums, Piano, Tabla, Flute, Vocals & Music Theory, Ukulele, Karaoke Nights, Violin, Kathak & Bharatnatyam, and Trinity Certification (Initial to Grade 8).
-- 🎭 **Iyer Sir’s Biography & Legacy**: Highlights his background as a former gym trainer (focusing on playing posture & stamina), acting experience (stage presence), musical family heritage, and Trinity College London certification prep.
-- 📜 **Student Transformation Story**: Features the real journey from YouTube tutorial burnout to confident intermediate guitar playing.
-- 📱 **Live Social Media Hub**: Instagram Reels wall featuring handle `_vibrantbeats_` and embedded YouTube tutorial player modal.
-- 📞 **Verified Contact Line**: Direct booking line **`9065338366`** and WhatsApp dispatch link.
+- 📞 **Verified Contact Line**: Direct booking line **`9065338366`** and WhatsApp chat link.
 - 🔊 **Built-in 100% Free Interactive Student Toolkit**:
   - **Web Audio Metronome**: Real-time visual pulse ring and audio click engine (40–240 BPM).
   - **Guitar Chord Visualizer & Synth**: Interactive fretboard diagrams (C, G, Am, F, D, Em) with audio synthesis playback.
